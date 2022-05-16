@@ -1,18 +1,26 @@
 
 public class Manager {
-	public Manager() {
-		
+	private String[] info;
+	
+	public Manager(String[] info) {
+		this.info = info;
 	}
 	
-	public void update(String db, String id, String attr, Object value) {
-		String query = "UPDATE " + attr + " = '" + value + "' FROM " + db + " WHERE id = '" + id + "'";
+	public Manager(String id, String name, String psswrd) {
+		info[0] = id;
+		info[1] = name;
+		info[2] = psswrd;
 	}
 	
-	public void add(String db, String values) {
-		String query = "INSERT INTO " + db + " VALUES(" + values + ")" ;
+	public String getId() {
+		return info[0];
 	}
 	
-	public void del(String db, String id) {
-		String query = "DELETE FROM " + db + "WHERE id = '" + id + "'";
+	public String getName() {
+		return info[1];
+	}
+	
+	public String getPsswrd() {
+		return info[2];
 	}
 }
