@@ -10,8 +10,7 @@ public class Dah_Hsian_account_activity_order {
 
 	private JFrame frame;
 	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField textField_3;
 
 	/**
 	 * Launch the application.
@@ -76,7 +75,7 @@ public class Dah_Hsian_account_activity_order {
 		
 		JLabel lblNewLabel_1 = new JLabel("\u4F7F\u7528\u72C0\u614B");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(260, 174, 77, 15);
+		lblNewLabel_1.setBounds(249, 174, 77, 15);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JButton btnNewButton_6 = new JButton("\u9055\u898F/\u505C\u6B0A\u7D00\u9304");
@@ -94,18 +93,21 @@ public class Dah_Hsian_account_activity_order {
 		frame.getContentPane().add(lblNewLabel_1_1_1);
 		
 		textField = new JTextField();
-		textField.setBounds(256, 199, 96, 21);
+		textField.setBounds(280, 199, 96, 21);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(462, 199, 96, 21);
-		frame.getContentPane().add(textField_1);
-		textField_1.setColumns(10);
+		textField_3 = new JTextField();
+		textField_3.setBounds(174, 199, 96, 21);
+		frame.getContentPane().add(textField_3);
+		textField_3.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(604, 199, 96, 21);
-		frame.getContentPane().add(textField_2);
-		textField_2.setColumns(10);
+		JButton btnNewButton_7 = new JButton("\u53D6\u6D88\u9810\u7D04");
+		btnNewButton_7.setBounds(463, 199, 85, 23);
+		frame.getContentPane().add(btnNewButton_7);
+		
+		JButton btnNewButton_8 = new JButton("\u8B8A\u66F4\u6210\u54E1");
+		btnNewButton_8.setBounds(607, 199, 85, 23);
+		frame.getContentPane().add(btnNewButton_8);
 	}
 }
