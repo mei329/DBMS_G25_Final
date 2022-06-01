@@ -1,21 +1,7 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Manager {
-	private Connection conn = null;
-	
-	public Manager() {
-		String url = "jdbc:sqlite:C:/Users/maggi/Programming/Java_workspace/DBMS_G25_Final/room_reservation_db.db";
-		try {
-			conn = DriverManager.getConnection(url);
-			System.out.println("Connecting to SQLite.");
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-	}
+public class Manager extends ConnectDb{
 	
 	public boolean execute(String query) {
 		try {

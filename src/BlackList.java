@@ -1,26 +1,23 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class BlackList {
-	private Connection conn = null;
-
-	public BlackList() {
-		String url = "jdbc:sqlite:C:/Users/maggi/Programming/Java_workspace/DBMS_G25_Final/room_reservation_db.db";
-		try {
-			conn = DriverManager.getConnection(url);
-			System.out.println("Connecting to SQLite.");
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+public class Blacklist extends ConnectDb{
+	
+	public static void main(String[] args) {
+		Blacklist blck = new Blacklist();
+		if (blck.add(108306000, System.currentTimeMillis())) {
+			System.out.println("Successly add to blaclist");
+		} else {
+			System.out.println("Fail.");
 		}
 	}
-
+	
 	public boolean execute(String query) {
 		try {
 			Statement stmt = conn.createStatement();
-			return stmt.execute(query);
+			stmt.execute(query);
+			return true;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -32,7 +29,7 @@ public class BlackList {
 		return execute(query);
 	}
 
-	public boolean add(int user_id, int banned_date) {
+	public boolean add(int user_id, long banned_date) {
 		String query = "INSERT INTO Blacklist (user_id, banned_date) VALUES(" + user_id + "," + banned_date + ")";
 		return execute(query);
 	}
@@ -40,6 +37,17 @@ public class BlackList {
 	public boolean del(int id) {
 		String query = "DELETE FROM Blacklist WHERE blacklist_id = " + id;
 		return execute(query);
+	}
+	
+	public boolean banned(long id) {
+		String query = "SELECT user_id FROM Blacklist WHERE blcklst_status = 'T' AND user_id = " + id;
+		try {
+			Statement stmt = conn.createStatement();
+			return stmt.execute(query);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
 	}
 
 	public boolean expire(int blacklist_id, int user_id) {
@@ -51,7 +59,7 @@ public class BlackList {
 	}
 
 	public boolean renew() {
-		String query = "SELECT blacklist_id, user_id, banned_date FROM Blacklist WHERE blacklist_status = 'banned'";
+		String query = "SELECT blacklist_id, user_id, banned_date FROM Blacklist WHERE blacklist_status = 'T'";
 		try {
 			Statement stmt = conn.createStatement();
 			boolean hasResultSet = stmt.execute(query);
