@@ -1,26 +1,23 @@
 package ui;
 
-
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
 import fpj.Order;
 
-import javax.swing.JButton;
+import java.awt.*;
+
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class Study_location_A {
+
 
 	public long studentId ;// = 109306027l ;
 	public String orderDate ;//= "2022-06-01";
 	public int borrow_start ;//= 10 ;
 	public int borrow_end ;//= 12 ;
-	
+
 	private JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
@@ -36,6 +33,10 @@ public class Study_location_A {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					// userId
+					// orderDate
+					// borrow_start
+					// borrow_end
 					Study_location_A window = new Study_location_A();
 					window.studentId = 109306027l;
 					window.orderDate = "2022-06-02" ;
@@ -64,8 +65,79 @@ public class Study_location_A {
 		frame.setBounds(100, 100, 1276, 629);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("A\u5340");
+
+		// 學號
+		int sx = 21 ;
+		int sy = 50 ;
+		JLabel lbSid = new JLabel("學號");
+		lbSid.setHorizontalAlignment(SwingConstants.CENTER);
+		lbSid.setBounds(sx, sy, 78, 24);
+		frame.getContentPane().add(lbSid);
+
+		final JTextField tfsid = new JTextField();
+		tfsid.setBounds(92, sy, 100, 24);
+		tfsid.setColumns(10);
+		tfsid.setText("109306028");
+		frame.getContentPane().add(tfsid);
+
+		// 借閱日期
+		JLabel lbOdate = new JLabel("借閱日期");
+		lbOdate.setHorizontalAlignment(SwingConstants.CENTER);
+		lbOdate.setBounds(200, 50, 78, 24);
+		frame.getContentPane().add(lbOdate);
+
+		final JTextField tfodate = new JTextField();
+		tfodate.setBounds(280, 50, 100, 24);
+		Date d = new Date() ;
+		String dateNow = (d.getYear()+1900)+"/"+(d.getMonth()+1)+"/"+d.getDate() ;
+		tfodate.setText(dateNow);
+		frame.getContentPane().add(tfodate);
+
+
+		// 借閱日期
+
+		JLabel lbOTime = new JLabel("借閱時間");
+		lbOTime.setHorizontalAlignment(SwingConstants.CENTER);
+		lbOTime.setBounds(380, 50, 78, 24);
+		frame.getContentPane().add(lbOTime);
+
+		final JTextField tfoTimeStart = new JTextField();
+		tfoTimeStart.setBounds(460, 50, 40, 24);
+		tfoTimeStart.setText("10");
+		frame.getContentPane().add(tfoTimeStart);
+		JLabel lbd = new JLabel("~");
+		lbd.setHorizontalAlignment(SwingConstants.CENTER);
+		lbd.setBounds(500, 50, 20, 24);
+		frame.getContentPane().add(lbd);
+
+		final JTextField tfoTimeEnd = new JTextField();
+		tfoTimeEnd.setBounds(520, 50, 40, 24);
+		tfoTimeEnd.setText("13");
+		frame.getContentPane().add(tfoTimeEnd);
+
+		// 大樓
+		JLabel tfBuilding = new JLabel();
+		tfBuilding.setBounds(600, 50, 40, 24);
+		tfBuilding.setText("");
+		frame.getContentPane().add(tfBuilding);
+		String[] optionsLocation = {"中正", "達賢","商圖", "綜圖"};
+		JComboBox<String> jcbLocation = new JComboBox<String>(optionsLocation);
+		jcbLocation.setBounds(630, 50, 60, 24);
+		frame.getContentPane().add(jcbLocation);
+
+		// 區域
+		JLabel tfArea = new JLabel();
+		tfArea.setBounds(700, 50, 40, 24);
+		tfArea.setText("區域");
+		frame.getContentPane().add(tfArea);
+		    String[] optionsArea = {"A", "A1","B", "C"};
+		    JComboBox<String> jcbArea = new JComboBox<String>(optionsArea);
+		jcbArea.setBounds(730, 50, 60, 24);
+		frame.getContentPane().add(jcbArea);
+
+
+
+		JLabel lblNewLabel = new JLabel("區域");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(21, 99, 78, 24);
 		frame.getContentPane().add(lblNewLabel);
@@ -259,19 +331,47 @@ public class Study_location_A {
 		JButton btnNewButton_1_2_7_5_1_7_1 = new JButton("A029");
 		btnNewButton_1_2_7_5_1_7_1.setBounds(341, 193, 71, 23);
 		frame.getContentPane().add(btnNewButton_1_2_7_5_1_7_1);
-		
+
 		JButton btnNewButton_1_2_7_5_1_2_4_1 = new JButton("A025");
 		btnNewButton_1_2_7_5_1_2_4_1.setBounds(410, 193, 71, 23);
 		frame.getContentPane().add(btnNewButton_1_2_7_5_1_2_4_1);
 		btnNewButton_1_2_7_5_1_2_4_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Object[] options = {"預約",
+						"取消"};
+				int n = JOptionPane.showOptionDialog(frame,
+								"學號："+tfsid.getText().trim()+"\n" +
+										"大樓：中正\n" +
+										"區域：A\n" +
+										"座位：A025\n" +
+								"日期：" +tfodate.getText().trim()+"\n"+
+								"時段：" +tfoTimeStart.getText().trim()+" ~ "+tfoTimeEnd.getText().trim()+"\n" +
+								"",
+						"預約確認",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,     //do not use a custom Icon
+						options,  //the titles of buttons
+						options[0]); //default button title
+
+
+
 				// 按下去之後要做的事
 				// System.out.println("按下 A025");
-				Order o  = new Order() ;
-				o.createSeatOrder("A025" , "T" , orderDate , borrow_start,borrow_end ,studentId ) ;
+				if( n==0){
+					Order o  = new Order() ;
+					long sid = Long.parseLong( tfsid.getText().trim()) ;
+					String odate  = tfodate.getText().trim() ;
+					int bStart = Integer.parseInt(  tfoTimeStart.getText().trim());
+					int bEnd = Integer.parseInt(  tfoTimeEnd.getText().trim());
+					o.createSeatOrder("A025" , "T" , odate , bStart,bEnd ,sid ) ;
+				}
+
 			}
 		});
-		
+
+
+
 		JButton btnNewButton_1_2_7_5_1_1_4_1 = new JButton("A030");
 		btnNewButton_1_2_7_5_1_1_4_1.setBounds(341, 215, 71, 23);
 		frame.getContentPane().add(btnNewButton_1_2_7_5_1_1_4_1);
