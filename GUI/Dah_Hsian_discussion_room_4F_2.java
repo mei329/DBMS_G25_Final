@@ -11,6 +11,10 @@ public class Dah_Hsian_discussion_room_4F_2 {
 
 	private JFrame frame;
 	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
 
 	/**
 	 * Launch the application.
@@ -132,7 +136,7 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		
 		JLabel lblNewLabel_3_2_1_3 = new JLabel("\u65E5\u671F\uFF1A");
 		lblNewLabel_3_2_1_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_3_2_1_3.setBounds(460, 357, 74, 15);
+		lblNewLabel_3_2_1_3.setBounds(460, 360, 74, 15);
 		frame.getContentPane().add(lblNewLabel_3_2_1_3);
 		
 		JButton btnNewButton_5 = new JButton("\u9810\u7D04");
@@ -142,5 +146,25 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		JButton btnNewButton_6 = new JButton("\u65B0\u589E");
 		btnNewButton_6.setBounds(289, 300, 68, 30);
 		frame.getContentPane().add(btnNewButton_6);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(525, 267, 96, 21);
+		frame.getContentPane().add(textField_1);
+		textField_1.setColumns(10);
+		
+		textField_2 = new JTextField();
+		textField_2.setBounds(525, 301, 96, 21);
+		frame.getContentPane().add(textField_2);
+		textField_2.setColumns(10);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(525, 329, 96, 21);
+		frame.getContentPane().add(textField_3);
+		textField_3.setColumns(10);
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(525, 357, 96, 21);
+		frame.getContentPane().add(textField_4);
+		textField_4.setColumns(10);
 	}
 }
