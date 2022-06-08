@@ -1,6 +1,3 @@
-package GUI;
-
-import Entity.User;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
