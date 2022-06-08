@@ -1,13 +1,32 @@
+package ui;
+
+
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import fpj.Order;
+
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class Dah_Hsian_discussion_room_4F {
+
+	public long studentId ;// = 109306027l ;
+	public String orderDate ;//= "2022-06-01";
+	public int borrow_start ;//= 10 ;
+	public int borrow_end ;//= 12 ;
 
 	private JFrame frame;
 
@@ -18,15 +37,24 @@ public class Dah_Hsian_discussion_room_4F {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					// userId
+					// orderDate
+					// borrow_start
+					// borrow_end
 					Dah_Hsian_discussion_room_4F window = new Dah_Hsian_discussion_room_4F();
+					window.studentId = 109306028;
+					window.orderDate = "2022-06-08" ;
+					window.borrow_start = 10 ;
+					window.borrow_end = 12 ;
 					window.frame.setVisible(true);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-
+	
 	/**
 	 * Create the application.
 	 */
@@ -37,11 +65,25 @@ public class Dah_Hsian_discussion_room_4F {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	
 	private void initialize() {
+
 		frame = new JFrame();
 		frame.setBounds(100, 100, 847, 689);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+
+		// 學號
+		JLabel lbSid = new JLabel("學號");
+		lbSid.setHorizontalAlignment(SwingConstants.CENTER);
+		lbSid.setBounds(5, 80, 78, 24);
+		frame.getContentPane().add(lbSid);
+
+		final JTextField tfsid = new JTextField();
+		tfsid.setBounds(62, 80, 100, 24);
+		tfsid.setColumns(10);
+		tfsid.setText("109306028");
+		frame.getContentPane().add(tfsid);
 		
 		JButton btnNewButton = new JButton("\u9810\u7D04");
 		btnNewButton.setBounds(21, 127, 85, 47);
@@ -67,7 +109,9 @@ public class Dah_Hsian_discussion_room_4F {
 		JButton btnNewButton_4 = new JButton("\u501F\u95B1\u7D00\u9304");
 		btnNewButton_4.setBounds(21, 413, 90, 55);
 		frame.getContentPane().add(btnNewButton_4);
-		
+
+
+
 		JButton btnNewButton_5 = new JButton("5/27");
 		btnNewButton_5.setBounds(168, 118, 68, 23);
 		frame.getContentPane().add(btnNewButton_5);
@@ -122,12 +166,20 @@ public class Dah_Hsian_discussion_room_4F {
 		
 		JButton btnNewButton_5_7 = new JButton("6/8");
 		btnNewButton_5_7.setBounds(558, 151, 68, 23);
+		btnNewButton_5_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((JButton)e.getSource()).setBackground(Color.DARK_GRAY);
+				((JButton)e.getSource()).setForeground(Color.white);
+				((JButton)e.getSource()).setOpaque(true);
+				((JButton)e.getSource()).setBorderPainted (false);
+			}
+		});
 		frame.getContentPane().add(btnNewButton_5_7);
 		
 		JButton btnNewButton_5_8 = new JButton("6/9");
 		btnNewButton_5_8.setBounds(636, 151, 68, 23);
 		frame.getContentPane().add(btnNewButton_5_8);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("\u65E5\u671F");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setBounds(108, 143, 46, 15);
@@ -141,6 +193,43 @@ public class Dah_Hsian_discussion_room_4F {
 		JButton btnNewButton_6 = new JButton("401(\u4EBA\u6578\u9650\u52363-6\u4EBA)");
 		btnNewButton_6.setBounds(205, 227, 161, 39);
 		frame.getContentPane().add(btnNewButton_6);
+		btnNewButton_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Object[] options = {"預約",
+						"取消"};
+				int n = JOptionPane.showOptionDialog(frame,
+								"學號："+tfsid.getText().trim()+"\n" +
+										"大樓：達賢\n" +
+										"自習室：401\n" +
+								"日期：" +"2022/6/8\n"+
+								"時段：" +"10:00 ~ 13:00"+"\n" +
+								"",
+						"預約確認",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,     //do not use a custom Icon
+						options,  //the titles of buttons
+						options[0]); //default button title
+
+
+				// 按下去之後要做的事
+				// System.out.println("按下 A025");
+				if( n==0){
+					Order o  = new Order() ;
+					long sid = Long.parseLong( tfsid.getText().trim()) ;
+					String odate  ="2022/6/8";
+					int bStart = 10;//Integer.parseInt(  tfoTimeStart.getText().trim());
+					int bEnd = 13 ; //Integer.parseInt(  tfoTimeEnd.getText().trim());
+					ArrayList<Long> sids = new ArrayList<Long>() ;
+					sids.add(sid) ;
+					o.createRoomOrder(401,"T",odate , bStart,bEnd,sids);
+				}
+
+			}
+		});
+
+		
+		
 		
 		JButton btnNewButton_6_1 = new JButton("402(\u4EBA\u6578\u9650\u52363-6\u4EBA)");
 		btnNewButton_6_1.addActionListener(new ActionListener() {
@@ -182,26 +271,74 @@ public class Dah_Hsian_discussion_room_4F {
 		JButton btnNewButton_4_1 = new JButton("10:00-10:30");
 		btnNewButton_4_1.setBounds(580, 413, 105, 23);
 		frame.getContentPane().add(btnNewButton_4_1);
+		btnNewButton_4_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((JButton)e.getSource()).setBackground(Color.DARK_GRAY);
+				((JButton)e.getSource()).setForeground(Color.white);
+				((JButton)e.getSource()).setOpaque(true);
+				((JButton)e.getSource()).setBorderPainted (false);
+			}
+		});
 		
 		JButton btnNewButton_5_9 = new JButton("10:30-11:00");
 		btnNewButton_5_9.setBounds(682, 413, 105, 23);
 		frame.getContentPane().add(btnNewButton_5_9);
+		btnNewButton_5_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((JButton)e.getSource()).setBackground(Color.DARK_GRAY);
+				((JButton)e.getSource()).setForeground(Color.white);
+				((JButton)e.getSource()).setOpaque(true);
+				((JButton)e.getSource()).setBorderPainted (false);
+			}
+		});
 		
 		JButton btnNewButton_6_4 = new JButton("11:00-11:30");
 		btnNewButton_6_4.setBounds(180, 445, 105, 23);
 		frame.getContentPane().add(btnNewButton_6_4);
+		btnNewButton_6_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((JButton)e.getSource()).setBackground(Color.DARK_GRAY);
+				((JButton)e.getSource()).setForeground(Color.white);
+				((JButton)e.getSource()).setOpaque(true);
+				((JButton)e.getSource()).setBorderPainted (false);
+			}
+		});
 		
 		JButton btnNewButton_7_1 = new JButton("11:30-12:00");
 		btnNewButton_7_1.setBounds(278, 445, 105, 23);
 		frame.getContentPane().add(btnNewButton_7_1);
+		btnNewButton_7_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((JButton)e.getSource()).setBackground(Color.DARK_GRAY);
+				((JButton)e.getSource()).setForeground(Color.white);
+				((JButton)e.getSource()).setOpaque(true);
+				((JButton)e.getSource()).setBorderPainted (false);
+			}
+		});
 		
 		JButton btnNewButton_8 = new JButton("12:00-12:30");
 		btnNewButton_8.setBounds(381, 445, 105, 23);
 		frame.getContentPane().add(btnNewButton_8);
+		btnNewButton_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((JButton)e.getSource()).setBackground(Color.DARK_GRAY);
+				((JButton)e.getSource()).setForeground(Color.white);
+				((JButton)e.getSource()).setOpaque(true);
+				((JButton)e.getSource()).setBorderPainted (false);
+			}
+		});
 		
 		JButton btnNewButton_9 = new JButton("12:30-13:00");
 		btnNewButton_9.setBounds(480, 445, 105, 23);
 		frame.getContentPane().add(btnNewButton_9);
+		btnNewButton_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((JButton)e.getSource()).setBackground(Color.DARK_GRAY);
+				((JButton)e.getSource()).setForeground(Color.white);
+				((JButton)e.getSource()).setOpaque(true);
+				((JButton)e.getSource()).setBorderPainted (false);
+			}
+		});
 		
 		JButton btnNewButton_10 = new JButton("13:00-13:30");
 		btnNewButton_10.setBounds(580, 446, 105, 23);
@@ -278,6 +415,8 @@ public class Dah_Hsian_discussion_room_4F {
 		JButton btnNewButton_22 = new JButton("\u4E0B\u4E00\u6B65");
 		btnNewButton_22.setBounds(684, 604, 85, 23);
 		frame.getContentPane().add(btnNewButton_22);
+		
+
 	}
 
 }
