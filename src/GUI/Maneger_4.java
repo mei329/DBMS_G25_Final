@@ -5,14 +5,23 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import Entity.Manager;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.ButtonGroup;
 
 public class Maneger_4 {
 
 	private JFrame frame;
-	private JTextField textField;
+	private JTextField textFieldSeatNum;
+	private Manager manager;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
 	 * Launch the application.
@@ -35,6 +44,7 @@ public class Maneger_4 {
 	 */
 	public Maneger_4() {
 		initialize();
+		manager = new Manager();
 	}
 
 	/**
@@ -59,22 +69,70 @@ public class Maneger_4 {
 		lblNewLabel.setBounds(240, 39, 85, 19);
 		frame.getContentPane().add(lblNewLabel);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("\u7981\u6B62\u501F\u95B1");
-		rdbtnNewRadioButton.setBounds(291, 180, 105, 23);
-		frame.getContentPane().add(rdbtnNewRadioButton);
+		JRadioButton rdbtnBan = new JRadioButton("\u7981\u6B62\u501F\u95B1");
+		buttonGroup.add(rdbtnBan);
+		rdbtnBan.setBounds(291, 180, 105, 23);
+		frame.getContentPane().add(rdbtnBan);
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("\u958B\u653E\u501F\u95B1");
-		rdbtnNewRadioButton_1.setBounds(291, 127, 105, 23);
-		frame.getContentPane().add(rdbtnNewRadioButton_1);
+		JRadioButton rdbtnAllow = new JRadioButton("\u958B\u653E\u501F\u95B1");
+		rdbtnAllow.setSelected(true);
+		buttonGroup.add(rdbtnAllow);
+		rdbtnAllow.setBounds(291, 127, 105, 23);
+		frame.getContentPane().add(rdbtnAllow);
 		
-		textField = new JTextField();
-		textField.setBounds(166, 160, 96, 21);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		textFieldSeatNum = new JTextField();
+		textFieldSeatNum.setBounds(166, 160, 96, 21);
+		frame.getContentPane().add(textFieldSeatNum);
+		textFieldSeatNum.setColumns(10);
 		
-		JButton btnNewButton_2 = new JButton("\u5132\u5B58");
-		btnNewButton_2.setBounds(291, 234, 85, 23);
-		frame.getContentPane().add(btnNewButton_2);
+		JButton btnSave = new JButton("儲存");
+		btnSave.setBounds(291, 234, 85, 23);
+		frame.getContentPane().add(btnSave);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"中正圖書館", "達賢圖書館", "綜院圖書館"}));
+		comboBox.setBounds(33, 159, 121, 27);
+		frame.getContentPane().add(comboBox);
+		
+		JLabel lblSaved = new JLabel("");
+		lblSaved.setBounds(166, 318, 250, 16);
+		frame.getContentPane().add(lblSaved);
+		
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String seatNum = textFieldSeatNum.getText();
+				String location = (String) (comboBox.getSelectedItem());
+				String locatID = "";
+				if (location == "中正圖書館") {
+					locatID = "4";
+				}
+				else if (location == "達賢圖書館") {
+					locatID = "1";
+				}
+				
+				if (rdbtnAllow.isSelected()) {
+					if (manager.seatUpdate(locatID, seatNum ,  "T")) {
+						JOptionPane.showMessageDialog(frame,"座位狀態儲存成功！",
+	                            "成功", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						JOptionPane.showMessageDialog(frame,"無法更改座位狀態，請檢查您所輸入的資訊",
+	                            "錯誤", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+				
+				if (rdbtnBan.isSelected()) {
+					if (manager.seatUpdate(locatID ,seatNum,  "F")) {
+						JOptionPane.showMessageDialog(frame,"座位狀態儲存成功！",
+	                            "成功", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						JOptionPane.showMessageDialog(frame,"無法更改座位狀態，請檢查您所輸入的資訊",
+	                            "錯誤", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			}
+		});
+		
 	}
-
 }
