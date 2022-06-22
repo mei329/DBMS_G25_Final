@@ -57,10 +57,22 @@ public class Maneger_4 {
 		frame.getContentPane().setLayout(null);
 		
 		JButton btnNewButton = new JButton("\u56DE\u9996\u9801");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Manager_1 home = new Manager_1();
+				frame.setVisible(false);
+			}
+		});
 		btnNewButton.setBounds(10, 37, 85, 23);
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("\u767B\u51FA");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Login_page login = new Login_page();
+				frame.setVisible(false);
+			}
+		});
 		btnNewButton_1.setBounds(457, 37, 85, 23);
 		frame.getContentPane().add(btnNewButton_1);
 		
@@ -97,6 +109,14 @@ public class Maneger_4 {
 		JLabel lblSaved = new JLabel("");
 		lblSaved.setBounds(166, 318, 250, 16);
 		frame.getContentPane().add(lblSaved);
+		
+		JLabel lblNewLabel_1 = new JLabel("選取圖書館");
+		lblNewLabel_1.setBounds(33, 141, 85, 16);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("輸入座位號碼");
+		lblNewLabel_2.setBounds(166, 141, 105, 16);
+		frame.getContentPane().add(lblNewLabel_2);
 		
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
