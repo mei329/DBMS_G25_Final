@@ -58,10 +58,22 @@ public class Manager_3 {
 		frame.getContentPane().setLayout(null);
 		
 		JButton btnNewButton = new JButton("\u56DE\u9996\u9801");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Manager_1 home = new Manager_1();
+				frame.setVisible(false);
+			}
+		});
 		btnNewButton.setBounds(24, 35, 85, 23);
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("\u767B\u51FA");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Login_page login = new Login_page();
+				frame.setVisible(false);
+			}
+		});
 		btnNewButton_1.setBounds(465, 35, 85, 23);
 		frame.getContentPane().add(btnNewButton_1);
 		
