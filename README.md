@@ -2,20 +2,35 @@
 
 ## Demo Process
 
-1. Dah-Hsian *Booking_page* [討論室預約] → *Booking_page_1* [達賢圖書館] → *Dah_Hsian_discussion_room_1* [4F] → *Dah_Hsian_discussion_room_4F* [6/8] [401] [10:00~13:00] [下一步] → *Dah_Hsian_discussion_room_4F_2* 其他使用者:"109405088" [新增] 其他使用者:"109405007" [新增] [預約] → *Dah_Hsian_account_activity_order* [回首頁] → *Booking_page_1* [返回] → *Booking_page*
-
-2. Study Room *Booking_page* [自習室劃位] → *Study_location_1* [A區] → *Study_location_2* [A060] [座位確認] [送出預約] → *Study_location_2* [A001] [A002] [座位確認] 其他使用者1:"109306099" [送出預約] → *Study_location_2* [A001] [A002] [座位確認] 其他使用者1:"109405088" [送出預約] → *Study_location_3* [... 地點：... 時間：...] [取消] [回首頁] → *Booking_page* *Study_location_2* [借閱紀錄] → *Study_location_3* [預約] → *Study_location_2*
-
-3. Blacklist Management *Login_page* [管理者登入] 帳號:"1" 密碼:"111" [登入] → *Manager_1* [黑名單管理] → *Manager_2* [加入黑名單] user_id:"109405007" → *Manager_2* [取消黑名單] list_id:"新增加的list_id" [回首頁] → *Manager_1* [登出] → *Login_page*
-
-4. User Info
+1. Order
    
-   | Name | StudentID | Password |     | Name | ManagerID | Password |
-   |:----:|:---------:|:--------:| --- |:----:|:---------:|:--------:|
-   | Mary | 109306099 | abcd     |     | mngr | 1         | 111      |
+   ＊beforehand：checkRoom / checkSeat（檢查使用者和座位狀態 + 檢查時間重疊與人數限制）
+   
+   1. 達賢4F討論室：06-29 的 401~404（按鈕的設定避免同個討論室借用時間重疊）
+   
+   2. 自習室A區：06-25 & 06-27 的 09:00~18:00（按鈕的設定避免同個討論室借用時間重疊）
+   
+   3. 借用紀錄：暫離 → 續借 → 修改時段 → 修改人員 → 取消
+
+2. Management
+   
+   1. 黑名單管理：加入黑名單 → 取消黑名單 → 刪除黑名單
+   
+   2. 使用者管理：註冊使用者 → 更改狀態 → 刪除使用者
+   
+   3. 訂單管理：修改人員（選討論室的order_id → 轉讓 → 新增 → 刪除） → 取消訂單
+   
+   4. 座位管理：禁止借閱 "達賢圖書館 401" （個別修改）→ 開放借閱 "達賢圖書館"（批量修改）
+
+3. User Info
+   
+   | Name  | StudentID | Password |     | Name | ManagerID | Password |
+   |:-----:|:---------:|:--------:| --- |:----:|:---------:|:--------:|
+   | Mary  | 109306099 | abcd     | (黑) | mngr | 1         | 111      |
    | 志明   | 109405094 | haha     |     |      |           |          |
    | 春嬌   | 109405088 | hehe     |     |      |           |          |
    | 龐德   | 109405007 | 007      |     |      |           |          |
+   | 北七   | 109405087 | 087      |     |      |           |          |
 
 ## Feature
 
@@ -36,9 +51,11 @@
    
    - 黑名單管理：人工管理 & 自動管理 (每次登入自動更新，解禁借用權停用一個月者)
    
-   - 座位管理：更新座位狀態以便應急與維護
+   - 訂單管理：人工管理 & 自動管理 (每次登入自動更新過期訂單的狀態)
    
-   - 訂單管理：後臺更改訂單資訊
+   - 使用者管理：註冊與註銷使用者 & 修改使用者狀態
+   
+   - 座位管理：更新座位狀態以便應急與維護
 
 ## System Design Logic
 
@@ -56,11 +73,11 @@
 | SeatOrder_page    | To place a normal/fast order for a seat.            |
 | UserActivity_page | To modify ongoing orders or browse past activities. |
 | Manager_page      | To choose a management type.                        |
-| Management_page   | To manipulate data from Order/Blacklist/Seat/Room.  |
+| Management_page   | To manipulate data from Order/Blacklist/Seat/User.  |
 
 ## Encountered Problems (Solved)
 
-1. ErrorMsg：*[SQLITE_BUSY] The database file is locked (database is locked)*
+1. ErrorMsg：*[SQLITE_BUSY] The database file is locked (database is locked)* <br>
    Solution：Make sure the connections to database are closed properly.
    
    ```java
@@ -105,4 +122,19 @@
           return false;
        }
    }
+   ```
+
+2. ErrMsg： *class javax.swing.JTable\$1 cannot be cast to class javax.swing.table.DefaultTableModel* <br>
+   Solution：invoke `JTable(TableModel)` rather that the `JTable(Object[][], Object[])` constructor to resize the table
+   
+   ```java
+   // create table
+   JTable table = new JTable(new DefaultTableModel(new Object[]{ "column_name", "column_name" }, 0));
+   table.setDefaultEditor(Object.class, null);  // set table not editable
+   JScrollPane sp = new JScrollPane(table);
+   frame.getContentPane().add(sp);
+   
+   // insert data to table
+   DefaultTableModel model = (DefaultTableModel) table.getModel();
+   model.addRow(new Object[] { "data", "data" });        
    ```
