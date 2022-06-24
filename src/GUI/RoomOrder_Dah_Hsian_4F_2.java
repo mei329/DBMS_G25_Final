@@ -1,5 +1,6 @@
 package GUI;
 
+import Entity.Order;
 import Entity.User;
 import java.awt.EventQueue;
 
@@ -7,7 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
@@ -23,15 +23,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.ArrayList;
 
-public class Dah_Hsian_discussion_room_4F_2 {
+public class RoomOrder_Dah_Hsian_4F_2 {
 
 	private JFrame frame;
 	private JTextField textField;
-	private JTextArea textArea;
+	private User user = new User();
+	private Order order = new Order();
 	private long id;
-	private User user;
-	private String name;
+	private String name,  room,  order_date;
+	private double borrow_start,  borrow_end;
+	private ArrayList<Long> sids = new ArrayList<Long>();
 
 	/**
 	 * Launch the application.
@@ -40,7 +43,8 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Dah_Hsian_discussion_room_4F_2 window = new Dah_Hsian_discussion_room_4F_2(109405094);
+					RoomOrder_Dah_Hsian_4F_2 window = new RoomOrder_Dah_Hsian_4F_2(109405094, "401(人數限制3-6人)",
+							"2022-06-25", 9.0, 12.0);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,10 +56,15 @@ public class Dah_Hsian_discussion_room_4F_2 {
 	/**
 	 * Create the application.
 	 */
-	public Dah_Hsian_discussion_room_4F_2(long id) {
+	public RoomOrder_Dah_Hsian_4F_2(long id, String room, String order_date, double borrow_start,
+			double borrow_end) {
 		this.id = id;
-		user = new User();
-		name = user.getUser(id);
+		sids.add(id);
+		name = user.getName(id);
+		this.room = room;
+		this.order_date = order_date;
+		this.borrow_start = borrow_start;
+		this.borrow_end = borrow_end;
 		initialize();
 	}
 
@@ -72,7 +81,7 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		JButton btnNewButton_1 = new JButton("\u56DE\u9996\u9801");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Dah_Hsian_discussion_room_1 room = new Dah_Hsian_discussion_room_1(id);
+				RoomOrder_Dah_Hsian room = new RoomOrder_Dah_Hsian(id);
 				frame.setVisible(false);
 			}
 		});
@@ -83,7 +92,7 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		JLabel lblNewLabel = new JLabel("\u9054\u8CE2\u5716\u66F8\u9928");
 		lblNewLabel.setFont(new Font("Tsukushi A Round Gothic", Font.BOLD, 23));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(375, 75, 121, 37);
+		lblNewLabel.setBounds(386, 75, 121, 37);
 		lblNewLabel.setForeground(new Color(66, 66, 28));
 		frame.getContentPane().add(lblNewLabel);
 
@@ -97,21 +106,13 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		btnNewButton_2.setBounds(716, 20, 85, 23);
 		btnNewButton_2.setForeground(new Color(115, 121, 59));
 		frame.getContentPane().add(btnNewButton_2);
-
-		JLabel lblNewLabel_1 = new JLabel("4\u6A13 401\u5BA4");
-		lblNewLabel_1.setForeground(new Color(66, 66, 28));
-		lblNewLabel_1.setFont(new Font("�s�ө���", Font.PLAIN, 16));
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(179, 157, 91, 29);
-		frame.getContentPane().add(lblNewLabel_1);
-
-		JLabel lblNewLabel_2 = new JLabel("2022-06-08");
+		
+		JLabel lblNewLabel_2 = new JLabel(order_date);
 		lblNewLabel_2.setForeground(new Color(66, 66, 28));
 		lblNewLabel_2.setFont(new Font("�s�ө���", Font.PLAIN, 16));
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2.setBounds(314, 160, 109, 22);
+		lblNewLabel_2.setBounds(233, 158, 109, 22);
 		frame.getContentPane().add(lblNewLabel_2);
-		btnNewButton_2.setForeground(new Color(115, 121, 59));
 
 		JButton btnNewButton_3 = new JButton("\u500B\u4EBA\u8CC7\u8A0A");
 		btnNewButton_3.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
@@ -119,29 +120,41 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		btnNewButton_3.setBounds(30, 284, 100, 55);
 		frame.getContentPane().add(btnNewButton_3);
 
-		JButton btnNewButton_4 = new JButton("\u501F\u95B1\u7D00\u9304");
+		JButton btnNewButton_4 = new JButton("借用紀錄");
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserActivity_page u = new UserActivity_page(id, "Room");
+				frame.setVisible(false);
+			}
+		});
 		btnNewButton_4.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 		btnNewButton_4.setForeground(new Color(115, 121, 59));
 		btnNewButton_4.setBounds(30, 451, 100, 55);
 		frame.getContentPane().add(btnNewButton_4);
 
 		JButton btnNewButton_3_1 = new JButton("預約");
+		btnNewButton_3_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RoomOrder_Dah_Hsian_4F d4 = new RoomOrder_Dah_Hsian_4F(id);
+				frame.setVisible(false);
+			}
+		});
 		btnNewButton_3_1.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 		btnNewButton_3_1.setForeground(new Color(115, 121, 59));
 		btnNewButton_3_1.setBounds(30, 134, 100, 55);
 		frame.getContentPane().add(btnNewButton_3_1);
 
-		JLabel lblNewLabel_2_1 = new JLabel("15:00-15:30");
+		JLabel lblNewLabel_2_1 = new JLabel(order.formatTime(borrow_start) + "~" + order.formatTime(borrow_end));
 		lblNewLabel_2_1.setFont(new Font("�s�ө���", Font.PLAIN, 16));
 		lblNewLabel_2_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2_1.setBounds(449, 160, 109, 22);
+		lblNewLabel_2_1.setBounds(387, 158, 109, 22);
 		frame.getContentPane().add(lblNewLabel_2_1);
 
-		JLabel lblNewLabel_2_1_1 = new JLabel("\u4EBA\u6578\u9650\u52363-6\u4EBA");
+		JLabel lblNewLabel_2_1_1 = new JLabel(room);
 		lblNewLabel_2_1_1.setForeground(new Color(66, 66, 28));
 		lblNewLabel_2_1_1.setFont(new Font("�s�ө���", Font.PLAIN, 16));
 		lblNewLabel_2_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2_1_1.setBounds(589, 160, 129, 22);
+		lblNewLabel_2_1_1.setBounds(486, 158, 232, 22);
 		frame.getContentPane().add(lblNewLabel_2_1_1);
 
 		JLabel lblNewLabel_3 = new JLabel("\u5176\u4ED6\u4F7F\u7528\u8005");
@@ -190,8 +203,9 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		StyleConstants.setForeground(s, new Color(66, 66, 28));
 		StyleConstants.setFontSize(s, 14);
 
-		String[] initString = { "租借者\n", "姓名：志明   證號：109405094   系所：資管   日期：2022-06-05\n", "\n", "其他使用者\n" };
-		String[] initStyles = { "title", "regular", "regular", "title" };
+		String[] initString = { "租借者\n", "姓名：" + name + "   證號：" + id + "   日期：" + java.time.LocalDate.now() + "\n\n",
+				"其他使用者\n" };
+		String[] initStyles = { "title", "regular", "title" };
 		try {
 			for (int i = 0; i < initString.length; i++) {
 				doc.insertString(doc.getLength(), initString[i], doc.getStyle(initStyles[i]));
@@ -203,15 +217,23 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		JButton btnNewButton_6 = new JButton("新增");
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				long id = Long.parseLong(textField.getText());
-				String name = user.getUser(id);
-				String str = "姓名：" + name + "   證號：" + id + "\n";
-				try {
-					doc.insertString(doc.getLength(), str, doc.getStyle("regular"));
-				} catch (BadLocationException ble) {
-					System.err.println("Couldn't insert initial text into text pane.");
+				long id = Long.parseLong(textField.getText().trim());
+				String name = user.getName(id);
+				if (order.checkUserStatus(id)) {
+					sids.add(id);
+					String str = "姓名：" + name + "   證號：" + id + "\n";
+					try {
+						doc.insertString(doc.getLength(), str, doc.getStyle("regular"));
+					} catch (BadLocationException ble) {
+						System.err.println("Couldn't insert initial text into text pane.");
+					}
+				} else {
+					if (name == null) {
+						JOptionPane.showMessageDialog(frame, "沒有該位使用者!!!", "錯誤", JOptionPane.ERROR_MESSAGE, null);
+					} else {
+						JOptionPane.showMessageDialog(frame, "該使用者暫時無法借閱!!!", "錯誤", JOptionPane.ERROR_MESSAGE, null);
+					}
 				}
-
 			}
 		});
 		btnNewButton_6.setForeground(new Color(115, 121, 59));
@@ -221,11 +243,19 @@ public class Dah_Hsian_discussion_room_4F_2 {
 		JButton btnNewButton_5 = new JButton("\u9810\u7D04");
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Dah_Hsian_discussion_room_book_success s = new Dah_Hsian_discussion_room_book_success(id);
-				JOptionPane.showMessageDialog(frame, "預約成功!!!", "通知", JOptionPane.INFORMATION_MESSAGE, null);
+				String checkMsg = order.checkRoom(room.substring(0, 3), sids, order_date, borrow_start, borrow_end);
+				if (checkMsg.equals("true")) {
+					if (order.createOrder(room.substring(0, 3), order_date, borrow_start, borrow_end, sids) != -1) {
+						JOptionPane.showMessageDialog(frame, "預約成功!!!", "通知", JOptionPane.INFORMATION_MESSAGE, null);
 
-				Dah_Hsian_account_activity_order a = new Dah_Hsian_account_activity_order(id);
-				frame.setVisible(false);
+						UserActivity_page s3 = new UserActivity_page(id, "Room");
+						frame.setVisible(false);
+					} else {
+						JOptionPane.showMessageDialog(frame, "預約失敗...", "Error", JOptionPane.ERROR_MESSAGE, null);
+					}
+				} else {
+					JOptionPane.showMessageDialog(frame, checkMsg);
+				}
 
 			}
 		});

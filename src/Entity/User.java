@@ -4,19 +4,43 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 
 public class User extends ConnectDb {
-	Blacklist blcklst = new Blacklist();
-
-	public User() {
-		blcklst.renew();
+	
+	public static void main(String[] args) {
+		User user = new User();
+		// 建立使用者: "Mary", 109306099, "abcd" ; "志明", 109405094, "haha" ; "春嬌", 109405088, "hehe" ; "龐德", 109405007, "007"
+		boolean b = user.createUser("北七", 109405087, "087");
+		if (b) {
+			System.out.println("新增使用者 :成功 ");
+		} else {
+			System.out.println("新增使用者 :失敗 ");
+		}
+		// 測試登入
+		b = user.userLogin(109306099, "abcd1");
+		if (b) {
+			System.out.println("使用者登入(錯誤密碼) :成功 ");
+		} else {
+			System.out.println("使用者登入(錯誤密碼) :失敗 ");
+		}
+		b = user.userLogin(109306099, "abcd");
+		if (b) {
+			System.out.println("使用者登入(正確密碼) :成功 ");
+		} else {
+			System.out.println("使用者登入(正確密碼) :失敗 ");
+		}
+		// 測試取得使用者名稱
+		long id = 109405094;// 志明
+		String name1 = user.getName(id);
+		if (name1 != null) {
+			System.out.println(id + " 找到 ==> " + name1);
+		} else {
+			System.out.println(id + " 找無此人!!!");
+		}
 	}
 
-	public String getUser(long id) {
+	public String getName(long id) {
 		String name = null;
 		String sql = "SELECT user_name from User " + "where user_id = ?";
 		try {
@@ -37,50 +61,45 @@ public class User extends ConnectDb {
 		}
 		return name;
 	}
-
-	public ArrayList<Long> getOrders(long id) {
-		ArrayList<Long> oid = new ArrayList<Long>();
-		String query = "SELECT order_id FROM OrderUsers AS o INNER JOIN User AS u ON o.user_id = u.user_id WHERE u.user_id = "
-				+ id;
+	
+	public String[][] getUserList(){
 		try {
 			super.connect();
+			String count = "SELECT COUNT(*) FROM User";
+			String query = "SELECT user_id, user_name, user_status, violations FROM User";
+
 			Statement stmt = conn.createStatement();
-			stmt.execute(query);
-			ResultSet result = stmt.getResultSet();
+			ResultSet result = stmt.executeQuery(count);
+			String[][] retVal = new String[result.getInt(1)][4];
+			
+			result = stmt.executeQuery(query);
+			int i = 0;
+			int j = 0;
 			while (result.next()) {
-				oid.add(result.getLong("order_id"));
+				retVal[i][j++] = result.getString("user_id");
+				retVal[i][j++] = result.getString("user_name");
+				retVal[i][j++] = result.getString("user_status");
+				retVal[i][j++] = result.getString("violations");
+				i++;
+				j = 0;
 			}
+			return retVal;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			super.closeConn();
 		}
-		return oid;
+		return null;
 	}
-
-	public String getOrderInfo(long oid) {
-		String retVal = "";
-		String query = "SELECT seat_id, order_date, borrow_start, borrow_end FROM Orders WHERE order_id = "
-				+ oid;
-		try {
-			super.connect();
-			Statement stmt = conn.createStatement();
-			stmt.execute(query);
-			ResultSet result = stmt.getResultSet();
-			if (result.next()) {
-				retVal = oid + "   ";
-				if (result.getString("seat_id") != null) {
-					retVal += "地點：" + result.getString("seat_id");
-				}
-				retVal += "   時間：" + result.getString("order_date") + " " + result.getInt("borrow_start") + "~"
-						+ result.getInt("borrow_end");
+	
+	public String[] getUserInfo(long uid) {
+		String[][] list = getUserList();
+		for (int i = 0; i < list.length; i++) {
+			if (list[i][0].equals(String.valueOf(uid))) {
+				return list[i];
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			super.closeConn();
 		}
-		return retVal;
+		return null;
 	}
 	
 	public boolean managerLogin(long id, String pwd) {
@@ -126,8 +145,6 @@ public class User extends ConnectDb {
 			}
 
 			if (count == 1) {
-				// Renew Blacklist database to remove expired penalty
-				blcklst.renew();
 				return true;
 			} else {
 				return false;
@@ -143,7 +160,6 @@ public class User extends ConnectDb {
 	public boolean createUser(String name, long id, String pwd) {
 		String sql = "INSERT INTO " + "User(user_id, user_name , user_psswrd , user_status , violations) "
 				+ "VALUES(?,?,?,?,?)";
-
 		try {
 			super.connect();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -160,60 +176,70 @@ public class User extends ConnectDb {
 		} finally {
 			super.closeConn();
 		}
-
 		return true;
+	}
+	
+	public boolean deleteUser(long id) {
+		String sql = "DELETE FROM User WHERE user_id = " + id;
+		try {
+			super.connect();
+			Statement stmt = conn.createStatement();
+			if (stmt.executeUpdate(sql) != 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return false;
+		} finally {
+			super.closeConn();
+		}
+	}
+	
+	public boolean updateUserStatus(long user_id, String status) {
+		try {
+			super.connect();
+			Statement stmt = conn.createStatement();
+			// update user status
+			String updateUser = "UPDATE User SET user_status = '" + status + "' WHERE user_id = " + user_id;
+			if (stmt.executeUpdate(updateUser) != 0) {
+				return true;
+			}
+
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			super.closeConn();
+		}
+		return false;
+	}
+	
+	public boolean updateUserStatus(long user_id) {
+		String userStatus = null;
+		try {
+			super.connect();
+			String query = "SELECT user_status FROM User WHERE user_id = " + user_id;
+
+			Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery(query);
+			userStatus = result.getString("user_status");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			super.closeConn();
+		}
+		
+		if (userStatus.equals("T")) {
+			return updateUserStatus(user_id, "F");
+		} else if (userStatus.equals("F")){
+			return updateUserStatus(user_id, "T");
+		} else {
+			return false;
+		}
 	}
 
 	public static String base64Encode(String input) {
 		return Base64.getEncoder().encodeToString(input.getBytes());
-	}
-
-	public static void main(String[] args) {
-
-		User user = new User();
-
-		// 建立使用者
-		// "Mary", 109306099, "abcd"
-		// "志明", 109405094, "haha"
-		// "春嬌", 109405088, "hehe"
-		// "龐德", 109405007, "007"
-
-		boolean b = user.createUser("Mary", 109306099, "abcd");
-		if (b) {
-			System.out.println("新增使用者 :成功 ");
-		} else {
-			System.out.println("新增使用者 :失敗 ");
-		}
-
-		// 測試登入
-		b = user.userLogin(109306099, "abcd1");
-		if (b) {
-			System.out.println("使用者登入(錯誤密碼) :成功 ");
-		} else {
-			System.out.println("使用者登入(錯誤密碼) :失敗 ");
-		}
-		b = user.userLogin(109306099, "abcd");
-		if (b) {
-			System.out.println("使用者登入(正確密碼) :成功 ");
-		} else {
-			System.out.println("使用者登入(正確密碼) :失敗 ");
-		}
-
-		// 測試取得使用者名稱
-		long id = 109405094;// 志明
-		String name1 = user.getUser(id);
-		if (name1 != null) {
-			System.out.println(id + " 找到 ==> " + name1);
-		} else {
-			System.out.println(id + " 找無此人!!!");
-		}
-		id = 9999;
-		name1 = user.getUser(id);
-		if (name1 != null) {
-			System.out.println(id + " 找到 ==> " + name1);
-		} else {
-			System.out.println(id + " 找無此人!!!");
-		}
-
 	}
 }

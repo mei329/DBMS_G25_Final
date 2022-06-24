@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 
 public class Blacklist extends ConnectDb {
 
@@ -17,13 +16,13 @@ public class Blacklist extends ConnectDb {
 		} else {
 			System.out.println("Fail.");
 		}
-		
+
 		if (blck.isBanned(109306099l)) {
 			System.out.println("108306099 is banned");
 		} else {
 			System.out.println("108306099 not banned");
 		}
-		
+
 		if (blck.renew()) {
 			System.out.println("Successfully renew blacklist");
 		} else {
@@ -31,7 +30,84 @@ public class Blacklist extends ConnectDb {
 		}
 	}
 
+	public Blacklist() {
+		renew();
+	}
+
+	public String[][] getBlckList() {
+		// get the list of all Blacklist's data
+		renew();
+		try {
+			super.connect();
+			String count = "SELECT COUNT(*) FROM Blacklist";
+			String query = "SELECT blcklst_id, blcklst_status, banned_date, user_id FROM Blacklist";
+
+			Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery(count);
+			String[][] retVal = new String[result.getInt(1)][4];
+
+			result = stmt.executeQuery(query);
+			int i = 0;
+			int j = 0;
+			while (result.next()) {
+				retVal[i][j++] = result.getString(1);
+				retVal[i][j++] = result.getString(2);
+				retVal[i][j++] = String
+						.valueOf(new SimpleDateFormat("yyyy-MM-dd  HH:mm").format(new Date(result.getLong(3))));
+				retVal[i][j++] = result.getString(4);
+				i++;
+				j = 0;
+			}
+			return retVal;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			super.closeConn();
+		}
+		return null;
+	}
+	
+	public String[] getBlckInfo(int row) {
+		int bid = getListID(row);
+		
+		String[][] list = getBlckList();
+		for (int i = 0; i < list.length; i++) {
+			if (list[i][0].equals(String.valueOf(bid))) {
+				return list[i];
+			}
+		}
+		return null;
+	}
+	
+	public int getListID(int row) {
+		String[][] list = getBlckList();
+		if (list != null) {
+			return Integer.parseInt(list[row][0]);
+		} else {
+			return 0;
+		}
+	}
+	
+	public int count() {
+		// get the total size of the list
+		String query = "SELECT COUNT(blcklst_id) FROM Blacklist";
+		try {
+			super.connect();
+			Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery(query);
+			return result.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			super.closeConn();
+		}
+		return 0;
+	}
+
 	public int countViolations() {
+		// get the counts of blacklist that is currently banned
 		String query = "SELECT COUNT(blcklst_id) FROM Blacklist WHERE blcklst_status = 'T'";
 		try {
 			super.connect();
@@ -47,39 +123,8 @@ public class Blacklist extends ConnectDb {
 		return 0;
 	}
 
-	public String[][] getBlacklist() {
-		renew();
-		try {
-			super.connect();
-			String query = "SELECT blcklst_id, blcklst_status, banned_date, user_id FROM Blacklist WHERE blcklst_status = 'T'";
-			
-			Statement stmt = conn.createStatement();
-			ResultSet result = stmt.executeQuery(query);
-			result = stmt.executeQuery(query);
-
-			String[][] retVal = new String[countViolations()][4];
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
-			int i = 0;
-			int j = 0;
-			while (result.next()) {
-				retVal[i][j++] = String.valueOf(result.getInt(1));
-				retVal[i][j++] = result.getString(2);
-				retVal[i][j++] = String.valueOf(fmt.format(new Date(result.getLong(3))));
-				retVal[i][j++] = String.valueOf(result.getInt(4));
-				i++;
-				j = 0;
-			}
-			return retVal;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			super.closeConn();
-		}
-		return null;
-	}
-
 	public boolean execute(String query) {
+		// return the execute update result
 		super.connect();
 		try {
 			Statement stmt = conn.createStatement();
@@ -104,13 +149,14 @@ public class Blacklist extends ConnectDb {
 	}
 
 	public boolean add(long user_id, long banned_date) {
-		String query = "INSERT INTO Blacklist (user_id, banned_date) VALUES(" + user_id + ", " + banned_date + ")";
-		String query2 = "UPDATE User SET user_status = 'F' WHERE user_id = " + user_id;
-		if (execute(query) && execute(query2)) {
-			return true;
-		} else {
-			return false;
+		User user = new User();
+		if (user.getName(user_id) != null) {
+			String query = "INSERT INTO Blacklist (user_id, banned_date) VALUES(" + user_id + ", " + banned_date + ")";
+			if (execute(query)) {
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public boolean del(long blcklst_id) {
@@ -118,10 +164,11 @@ public class Blacklist extends ConnectDb {
 		return execute(query);
 	}
 
-	public boolean isBanned(long id) {
-		super.connect();
-		String query = "SELECT user_id FROM Blacklist WHERE blcklst_status = 'T' AND user_id = " + id;
+	public boolean isBanned(long user_id) {
+		// return true if it is on the blacklist
+		String query = "SELECT user_id FROM Blacklist WHERE blcklst_status = 'T' AND user_id = " + user_id;
 		try {
+			super.connect();
 			Statement stmt = conn.createStatement();
 			if (stmt.executeQuery(query).next()) {
 				return true;
@@ -134,34 +181,12 @@ public class Blacklist extends ConnectDb {
 		return false;
 	}
 
-	public boolean expire(long blacklist_id) {
-		long user_id = 0;
-		try {
-			super.connect();
-			String getID = "SELECT user_id FROM Blacklist WHERE blcklst_id = " + blacklist_id;
-			Statement stmt = conn.createStatement();
-			ResultSet result = stmt.executeQuery(getID);
-			if (result.next()) {
-				user_id = result.getLong("user_id");
-			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		} finally {
-			super.closeConn();
-		}
-		// Update to Blacklist and User DB
-		if (update(blacklist_id, "blcklst_status", "'F'")) {
-			String query = "UPDATE User SET user_status = 'T' WHERE user_id = " + user_id;
-			return execute(query);
-		}
-		return false;
-	}
-
 	public boolean renew() {
+		// update the blacklist status if it's expired
 		int size = countViolations();
 		long[] bid = new long[size];
 		long[] date = new long[size];
-		
+
 		try {
 			super.connect();
 			String query = "SELECT blcklst_id, banned_date FROM Blacklist WHERE blcklst_status = 'T'";
@@ -178,18 +203,18 @@ public class Blacklist extends ConnectDb {
 		} finally {
 			super.closeConn();
 		}
-		
+
 		long now = System.currentTimeMillis();
 		// 一個月的停止借用權到期
 		for (int i = 0; i < size; i++) {
 			if (now - date[i] >= 2629800000l) {
-				if (expire(bid[i])) {
+				if (update(bid[i], "blcklst_status", "'F'")) {
 					System.out.println(bid[i] + " is expired.");
 				} else {
 					return false;
 				}
 			}
-		}		
+		}
 		return true;
 	}
 }

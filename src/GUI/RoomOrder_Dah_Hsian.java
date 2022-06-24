@@ -11,7 +11,7 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.*;
 
-public class Dah_Hsian_discussion_room_1 {
+public class RoomOrder_Dah_Hsian {
 
 	private JFrame frame;
 	private long id;
@@ -25,7 +25,7 @@ public class Dah_Hsian_discussion_room_1 {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Dah_Hsian_discussion_room_1 window = new Dah_Hsian_discussion_room_1(109405094);
+					RoomOrder_Dah_Hsian window = new RoomOrder_Dah_Hsian(109405094);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,9 +37,9 @@ public class Dah_Hsian_discussion_room_1 {
 	/**
 	 * Create the application.
 	 */
-	public Dah_Hsian_discussion_room_1(long id) {
+	public RoomOrder_Dah_Hsian(long id) {
 		this.id=id;
-		name = user.getUser(id);
+		name = user.getName(id);
 		initialize();
 	}
 
@@ -73,7 +73,7 @@ public class Dah_Hsian_discussion_room_1 {
 		btnNewButton.setBounds(228, 354, 130, 50);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Dah_Hsian_discussion_room_4F dr4f = new Dah_Hsian_discussion_room_4F(id);
+				RoomOrder_Dah_Hsian_4F dr4f = new RoomOrder_Dah_Hsian_4F(id);
 				frame.setVisible(false);
 			}
 		});
@@ -102,7 +102,7 @@ public class Dah_Hsian_discussion_room_1 {
 		btnBack.setBounds(26, 32, 85, 23);
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Booking_page_1 bp1 = new Booking_page_1(id);
+				Room_page bp1 = new Room_page(id);
 				frame.setVisible(false);
 			}
 		});
@@ -128,12 +128,6 @@ public class Dah_Hsian_discussion_room_1 {
 		JButton btnNewButton_3 = new JButton("\u500B\u4EBA\u8CC7\u8A0A");
 		btnNewButton_3.setForeground(new Color(115,121,59));
 		btnNewButton_3.setBounds(390, 47, 85, 23);
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Dah_Hsian_personaldata_1 dhpd = new Dah_Hsian_personaldata_1();
-				frame.setVisible(false);
-			}
-		});
 		frame.getContentPane().add(btnNewButton_3);
 		
 		frame.setVisible(true);

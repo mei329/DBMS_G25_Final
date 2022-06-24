@@ -10,7 +10,6 @@ import java.awt.*;
 import java.sql.*;
 import java.awt.event.*;
 
-
 public class Login_page extends JFrame {
 
 	private JFrame frame;
@@ -50,70 +49,78 @@ public class Login_page extends JFrame {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(219,219,178));
+		frame.getContentPane().setBackground(new Color(219, 219, 178));
 		frame.setBackground(new Color(255, 228, 225));
 		frame.setForeground(new Color(255, 228, 225));
 		frame.getContentPane().setForeground(new Color(255, 228, 225));
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		JLabel title = new JLabel("使用者登入(UserLogin)");
 		title.setFont(new Font("PT Sans", Font.PLAIN, 16));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setForeground(new Color(66,66,28));
-		title.setBounds(115, 25, 216, 51);
+		title.setForeground(new Color(66, 66, 28));
+		title.setBounds(110, 25, 216, 51);
 		frame.getContentPane().add(title);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("帳號：");
-		lblNewLabel_1.setForeground(new Color(115,121,59));
+		lblNewLabel_1.setForeground(new Color(115, 121, 59));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1.setBounds(115, 95, 50, 20);
+		lblNewLabel_1.setBounds(110, 95, 50, 20);
 		frame.getContentPane().add(lblNewLabel_1);
-		
+
 		textField = new JTextField();
 		textField.setBounds(204, 95, 110, 21);
 		frame.getContentPane().add(textField);
-		
+
 		textField_1 = new JTextField();
 		textField_1.setBounds(204, 145, 110, 21);
 		frame.getContentPane().add(textField_1);
 		textField_1.setColumns(10);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("密碼：");
-		lblNewLabel_2.setForeground(new Color(115,121,59));
+		lblNewLabel_2.setForeground(new Color(115, 121, 59));
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_2.setBounds(115, 145, 50, 20);
+		lblNewLabel_2.setBounds(110, 145, 50, 20);
 		frame.getContentPane().add(lblNewLabel_2);
-		
-		JButton userLogin = new JButton("\u767B\u5165");
-		userLogin.setForeground(new Color(115,121,59));
-		userLogin.setBackground(new Color(238, 232, 170));
-		userLogin.addActionListener(new ActionListener() {
+
+		JButton enter = new JButton("\u767B\u5165");
+		enter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				id = Long.parseLong(textField.getText());
-				if (isUser) {
-					if (user.checkUser(id, textField_1.getText())) {
-						System.out.println("Successfully login.");
-						Booking_page booking_instance = new Booking_page(id);
-						frame.setVisible(false);
+				if (!textField.getText().isBlank() || !textField_1.getText().isBlank()) {
+					id = Long.parseLong(textField.getText());
+					String psswrd = textField_1.getText();
+
+					if (isUser) {
+						// user login page
+						if (user.userLogin(id, psswrd)) {
+							System.out.println("Successfully login.");
+							Home_page booking_instance = new Home_page(id);
+							frame.setVisible(false);
+						} else {
+							JOptionPane.showMessageDialog(frame, "帳號/密碼錯誤!", "Error", JOptionPane.WARNING_MESSAGE);
+						}
 					} else {
-						JOptionPane.showMessageDialog(frame, "帳號/密碼錯誤!", "Error", JOptionPane.WARNING_MESSAGE);
+						// manager login page
+						if (user.managerLogin(id, psswrd)) {
+							System.out.println("Successfully login.");
+							Manager_page m1 = new Manager_page();
+							frame.setVisible(false);
+						} else {
+							JOptionPane.showMessageDialog(frame, "帳號/密碼錯誤!", "Error", JOptionPane.WARNING_MESSAGE);
+						}
 					}
 				} else {
-					if (user.checkManager(id, textField_1.getText())) {
-						System.out.println("Successfully login.");
-						Manager_1 m1 = new Manager_1();
-						frame.setVisible(false);
-					} else {
-						JOptionPane.showMessageDialog(frame, "帳號/密碼錯誤!", "Error", JOptionPane.WARNING_MESSAGE);
-					}
+					JOptionPane.showMessageDialog(frame, "帳號/密碼空白!", "Error", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
-		userLogin.setBounds(173, 192, 85, 23);
-		frame.getContentPane().add(userLogin);
-		
+		enter.setForeground(new Color(115, 121, 59));
+		enter.setBackground(new Color(238, 232, 170));
+		enter.setBounds(170, 192, 85, 23);
+		frame.getContentPane().add(enter);
+
 		JButton mngrLogin = new JButton("<html><u>管理者登入</u></html>");
 		mngrLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -138,9 +145,9 @@ public class Login_page extends JFrame {
 		mngrLogin.setForeground(Color.GRAY);
 		mngrLogin.setBorder(null);
 		mngrLogin.setContentAreaFilled(false);
-		mngrLogin.setBounds(173, 220, 85, 23);
+		mngrLogin.setBounds(170, 220, 85, 23);
 		frame.getContentPane().add(mngrLogin);
-		
+
 		frame.setVisible(true);
 	}
 }

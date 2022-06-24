@@ -10,7 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
 
-public class Otherlib_discussionroom_1 {
+public class RoomOrder_Otherlib {
 
 	private JFrame frame;
 	private long id;
@@ -23,7 +23,7 @@ public class Otherlib_discussionroom_1 {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Otherlib_discussionroom_1 window = new Otherlib_discussionroom_1(109405094,"name");
+					RoomOrder_Otherlib window = new RoomOrder_Otherlib(109405094,"name");
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -35,7 +35,7 @@ public class Otherlib_discussionroom_1 {
 	/**
 	 * Create the application.
 	 */
-	public Otherlib_discussionroom_1(long id, String name) {
+	public RoomOrder_Otherlib(long id, String name) {
 		this.id = id;
 		this.name = name;
 		initialize();
@@ -73,7 +73,7 @@ public class Otherlib_discussionroom_1 {
 		JButton btnNewButton = new JButton("\u8FD4\u56DE");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Booking_page_1 book = new Booking_page_1(id);
+				Room_page book = new Room_page(id);
 				frame.setVisible(false);
 			}
 		});
@@ -92,48 +92,24 @@ public class Otherlib_discussionroom_1 {
 		btnNewButton_1.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		btnNewButton_1.setForeground(new Color(115,121,59));
 		btnNewButton_1.setBounds(122, 190, 126, 49);
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Otherlib_discussionroom_studycarrel_1 carrel = new Otherlib_discussionroom_studycarrel_1();
-				frame.setVisible(false);
-			}
-		});
 		frame.getContentPane().add(btnNewButton_1);
 		
 		JButton btnNewButton_1_1 = new JButton("\u96C6\u601D\u5C0F\u9593");
 		btnNewButton_1_1.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		btnNewButton_1_1.setForeground(new Color(115,121,59));
 		btnNewButton_1_1.setBounds(372, 190, 132, 49);
-		btnNewButton_1_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Otherlib_discussionroom_meetingroom mRoom = new Otherlib_discussionroom_meetingroom();
-				frame.setVisible(false);
-			}
-		});
 		frame.getContentPane().add(btnNewButton_1_1);
 		
 		JButton btnNewButton_1_2 = new JButton("\u5546\u5716\u7814\u8A0E\u5BA4");
 		btnNewButton_1_2.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		btnNewButton_1_2.setForeground(new Color(115,121,59));
 		btnNewButton_1_2.setBounds(122, 310, 126, 49);
-		btnNewButton_1_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Otherlib_discussionroom_commerce commerce = new Otherlib_discussionroom_commerce();
-				frame.setVisible(false);
-			}
-		});
 		frame.getContentPane().add(btnNewButton_1_2);
 		
 		JButton btnNewButton_1_3 = new JButton("\u7D9C\u5716\u7814\u8A0E\u5BA4");
 		btnNewButton_1_3.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		btnNewButton_1_3.setForeground(new Color(115,121,59));
 		btnNewButton_1_3.setBounds(372, 310, 132, 49);
-		btnNewButton_1_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Otherlib_discussionroom_socialscience ss = new Otherlib_discussionroom_socialscience();
-				frame.setVisible(false);
-			}
-		});
 		frame.getContentPane().add(btnNewButton_1_3);
 		
 		frame.setVisible(true);

@@ -8,11 +8,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
-import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Manager_1 {
+public class Manager_page {
 
 	private JFrame frame;
 
@@ -23,7 +22,7 @@ public class Manager_1 {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Manager_1 window = new Manager_1();
+					Manager_page window = new Manager_page();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -35,7 +34,7 @@ public class Manager_1 {
 	/**
 	 * Create the application.
 	 */
-	public Manager_1() {
+	public Manager_page() {
 		initialize();
 	}
 
@@ -58,31 +57,31 @@ public class Manager_1 {
 		JButton btnNewButton_1 = new JButton("\u8A02\u55AE\u7BA1\u7406");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Manager_3 m3= new Manager_3();
+				Management_Order m3= new Management_Order();
 				frame.setVisible(false);
 			}
 		});
-		btnNewButton_1.setBounds(244, 200, 106, 48);
+		btnNewButton_1.setBounds(160, 260, 106, 48);
 		frame.getContentPane().add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("\u9ED1\u540D\u55AE\u7BA1\u7406");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Manager_2 m2 = new Manager_2();
+				Management_Blacklist m2 = new Management_Blacklist();
 				frame.setVisible(false);
 			}
 		});
-		btnNewButton_2.setBounds(115, 200, 106, 48);
+		btnNewButton_2.setBounds(160, 140, 106, 48);
 		frame.getContentPane().add(btnNewButton_2);
 		
 		JButton btnNewButton_2_1 = new JButton("\u5EA7\u4F4D\u7BA1\u7406");
 		btnNewButton_2_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Maneger_4 m4 = new Maneger_4();
+				Management_Seat m4 = new Management_Seat();
 				frame.setVisible(false);
 			}
 		});
-		btnNewButton_2_1.setBounds(377, 200, 106, 48);
+		btnNewButton_2_1.setBounds(340, 260, 106, 48);
 		frame.getContentPane().add(btnNewButton_2_1);
 		
 		JButton btnNewButton_3_1 = new JButton("\u767B\u51FA");
@@ -94,6 +93,16 @@ public class Manager_1 {
 		});
 		btnNewButton_3_1.setBounds(485, 31, 85, 23);
 		frame.getContentPane().add(btnNewButton_3_1);
+		
+		JButton btnNewButton_2_1_1 = new JButton("使用者管理");
+		btnNewButton_2_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Management_User m5 = new Management_User();
+				frame.setVisible(false);
+			}
+		});
+		btnNewButton_2_1_1.setBounds(340, 140, 106, 48);
+		frame.getContentPane().add(btnNewButton_2_1_1);
 		
 		frame.setVisible(true);
 	}

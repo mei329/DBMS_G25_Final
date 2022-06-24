@@ -1,7 +1,6 @@
 package GUI;
 
 import Entity.User;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,7 +11,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.*;
 
-public class Booking_page_1 extends JFrame{
+public class Room_page extends JFrame{
 
 	private JFrame frame;
 	private User user = new User() ;
@@ -22,9 +21,9 @@ public class Booking_page_1 extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public Booking_page_1(Long id) {
+	public Room_page(Long id) {
 		this.id = id;
-		name = user.getUser(id);
+		name = user.getName(id);
 		initialize();
 	}
 
@@ -48,22 +47,22 @@ public class Booking_page_1 extends JFrame{
 		JButton btnNewButton = new JButton("\u9054\u8CE2\u5716\u66F8\u9928");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Dah_Hsian_discussion_room_1 room = new Dah_Hsian_discussion_room_1(id);
+				RoomOrder_Dah_Hsian room = new RoomOrder_Dah_Hsian(id);
 				frame.setVisible(false);
 			}
 		});
 		btnNewButton.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		btnNewButton.setForeground(new Color(115,121,59));
-		btnNewButton.setBounds(267, 159, 124, 72);
+		btnNewButton.setBounds(270, 159, 124, 72);
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("中正圖書館/商圖/綜圖");
 		btnNewButton_1.setFont(new Font("Waseem", Font.PLAIN, 15));
 		btnNewButton_1.setForeground(new Color(115,121,59));
-		btnNewButton_1.setBounds(42, 159, 179, 72);
+		btnNewButton_1.setBounds(50, 159, 179, 72);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Otherlib_discussionroom_1 old1 = new Otherlib_discussionroom_1(id, name);
+				RoomOrder_Otherlib old1 = new RoomOrder_Otherlib(id, name);
 				frame.setVisible(false);
 			}
 		});
@@ -90,7 +89,7 @@ public class Booking_page_1 extends JFrame{
 		JButton btnNewButton_3 = new JButton("\u8FD4\u56DE");
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Booking_page book = new Booking_page(id);
+				Home_page book = new Home_page(id);
 				book.frame.setVisible(true);
 				frame.setVisible(false);
 			}

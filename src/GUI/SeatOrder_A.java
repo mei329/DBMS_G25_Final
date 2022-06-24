@@ -1,18 +1,18 @@
 package GUI;
 
 import Entity.Order;
-import Entity.User;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.awt.event.ActionEvent;
@@ -21,25 +21,22 @@ import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-public class Study_location_2 {
+public class SeatOrder_A {
 
 	private JFrame frame;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private long id;
-	private User user = new User();
-	private String name;
-	private ArrayList<JCheckBox> checkboxes = new ArrayList<JCheckBox>();
-	private ArrayList<String> checked;
 	private JTextField tfodate;
 	private JTextField tfoTimeStart;
 	private JTextField tfoTimeEnd;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private Order order = new Order();
+	private ArrayList<String> checked;
+	private ArrayList<String> bannedSeats;
+	private long id;
+	private String order_date;
+	private double borrow_start;
+	private double borrow_end;
 
 	/**
 	 * Launch the application.
@@ -48,7 +45,7 @@ public class Study_location_2 {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Study_location_2 window = new Study_location_2(109405094);
+					SeatOrder_A window = new SeatOrder_A(109405094);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,9 +57,8 @@ public class Study_location_2 {
 	/**
 	 * Create the application.
 	 */
-	public Study_location_2(long id) {
+	public SeatOrder_A(long id) {
 		this.id = id;
-		name = user.getUser(id);
 		initialize();
 	}
 
@@ -85,7 +81,7 @@ public class Study_location_2 {
 		JButton btnNewButton_1 = new JButton("返回");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Study_location_1 study = new Study_location_1(id);
+				Seat_page study = new Seat_page(id);
 				frame.setVisible(false);
 			}
 		});
@@ -103,7 +99,7 @@ public class Study_location_2 {
 		JButton btnNewButton_4 = new JButton("\u501F\u95B1\u7D00\u9304");
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Study_location_3 s3 = new Study_location_3(id);
+				UserActivity_page s3 = new UserActivity_page(id, "Seat");
 				frame.setVisible(false);
 			}
 		});
@@ -111,6 +107,8 @@ public class Study_location_2 {
 		btnNewButton_4.setForeground(new Color(115, 121, 59));
 		btnNewButton_4.setBounds(39, 190, 120, 40);
 		frame.getContentPane().add(btnNewButton_4);
+
+		ArrayList<JCheckBox> checkboxes = new ArrayList<JCheckBox>();
 
 		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("A064");
 		chckbxNewCheckBox_1.setForeground(new Color(66, 66, 28));
@@ -279,7 +277,7 @@ public class Study_location_2 {
 		chckbxNewCheckBox_1_1_7_1.setBounds(511, 232, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_7_1);
 		checkboxes.add(chckbxNewCheckBox_1_1_7_1);
-		
+
 		JCheckBox chckbxNewCheckBox_1_6_2_1 = new JCheckBox("A013");
 		chckbxNewCheckBox_1_6_2_1.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_6_2_1.setForeground(new Color(66, 66, 28));
@@ -404,9 +402,6 @@ public class Study_location_2 {
 		checkboxes.add(chckbxNewCheckBox_1_5_4);
 
 		JCheckBox chckbxNewCheckBox_1_1_4_4 = new JCheckBox("AN01");
-		chckbxNewCheckBox_1_1_4_4.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1_1_4_4.setEnabled(false);
-		chckbxNewCheckBox_1_1_4_4.setForeground(Color.BLACK);
 		chckbxNewCheckBox_1_1_4_4.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_4_4.setBounds(1015, 154, 73, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_4_4);
@@ -420,8 +415,6 @@ public class Study_location_2 {
 		checkboxes.add(chckbxNewCheckBox_1_6_4);
 
 		JCheckBox chckbxNewCheckBox_1_1_5_4 = new JCheckBox("AN02");
-		chckbxNewCheckBox_1_1_5_4.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1_1_5_4.setEnabled(false);
 		chckbxNewCheckBox_1_1_5_4.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_5_4.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_5_4.setBounds(1015, 179, 73, 23);
@@ -436,8 +429,6 @@ public class Study_location_2 {
 		checkboxes.add(chckbxNewCheckBox_1_7_4);
 
 		JCheckBox chckbxNewCheckBox_1_1_6_4 = new JCheckBox("AN03");
-		chckbxNewCheckBox_1_1_6_4.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1_1_6_4.setEnabled(false);
 		chckbxNewCheckBox_1_1_6_4.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_6_4.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_6_4.setBounds(1015, 207, 73, 23);
@@ -627,8 +618,6 @@ public class Study_location_2 {
 		checkboxes.add(chckbxNewCheckBox_1_1_5_10);
 
 		JCheckBox chckbxNewCheckBox_1_5_11 = new JCheckBox("AH13");
-		chckbxNewCheckBox_1_5_11.setEnabled(false);
-		chckbxNewCheckBox_1_5_11.setBackground(Color.LIGHT_GRAY);
 		chckbxNewCheckBox_1_5_11.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_5_11.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_5_11.setBounds(236, 353, 66, 23);
@@ -636,8 +625,6 @@ public class Study_location_2 {
 		checkboxes.add(chckbxNewCheckBox_1_5_11);
 
 		JCheckBox chckbxNewCheckBox_1_1_4_11 = new JCheckBox("AH12");
-		chckbxNewCheckBox_1_1_4_11.setEnabled(false);
-		chckbxNewCheckBox_1_1_4_11.setBackground(Color.LIGHT_GRAY);
 		chckbxNewCheckBox_1_1_4_11.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_4_11.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_4_11.setBounds(304, 353, 66, 23);
@@ -658,82 +645,80 @@ public class Study_location_2 {
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_4_12);
 		checkboxes.add(chckbxNewCheckBox_1_1_4_12);
 
-		JCheckBox chckbxNewCheckBox_1_1_4_12_1 = new JCheckBox("AH9");
+		JCheckBox chckbxNewCheckBox_1_1_4_12_1 = new JCheckBox("AH09");
 		chckbxNewCheckBox_1_1_4_12_1.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_4_12_1.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_4_12_1.setBounds(508, 353, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_4_12_1);
 		checkboxes.add(chckbxNewCheckBox_1_1_4_12_1);
 
-		JCheckBox chckbxNewCheckBox_1_5_11_1 = new JCheckBox("AH8");
+		JCheckBox chckbxNewCheckBox_1_5_11_1 = new JCheckBox("AH08");
 		chckbxNewCheckBox_1_5_11_1.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_5_11_1.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_5_11_1.setBounds(576, 353, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_5_11_1);
 		checkboxes.add(chckbxNewCheckBox_1_5_11_1);
 
-		JCheckBox chckbxNewCheckBox_1_1_4_11_1 = new JCheckBox("AH7");
+		JCheckBox chckbxNewCheckBox_1_1_4_11_1 = new JCheckBox("AH07");
 		chckbxNewCheckBox_1_1_4_11_1.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_4_11_1.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_4_11_1.setBounds(644, 353, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_4_11_1);
 		checkboxes.add(chckbxNewCheckBox_1_1_4_11_1);
 
-		JCheckBox chckbxNewCheckBox_1_5_12_1 = new JCheckBox("AH6");
+		JCheckBox chckbxNewCheckBox_1_5_12_1 = new JCheckBox("AH06");
 		chckbxNewCheckBox_1_5_12_1.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_5_12_1.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_5_12_1.setBounds(712, 353, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_5_12_1);
 		checkboxes.add(chckbxNewCheckBox_1_5_12_1);
 
-		JCheckBox chckbxNewCheckBox_1_1_4_12_2 = new JCheckBox("AH5");
+		JCheckBox chckbxNewCheckBox_1_1_4_12_2 = new JCheckBox("AH05");
 		chckbxNewCheckBox_1_1_4_12_2.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_4_12_2.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_4_12_2.setBounds(780, 353, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_4_12_2);
 		checkboxes.add(chckbxNewCheckBox_1_1_4_12_2);
 
-		JCheckBox chckbxNewCheckBox_1_1_4_12_1_1 = new JCheckBox("AH4");
+		JCheckBox chckbxNewCheckBox_1_1_4_12_1_1 = new JCheckBox("AH04");
 		chckbxNewCheckBox_1_1_4_12_1_1.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_4_12_1_1.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_4_12_1_1.setBounds(848, 353, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_4_12_1_1);
 		checkboxes.add(chckbxNewCheckBox_1_1_4_12_1_1);
 
-		JCheckBox chckbxNewCheckBox_1_1_4_12_1_1_1 = new JCheckBox("AH3");
+		JCheckBox chckbxNewCheckBox_1_1_4_12_1_1_1 = new JCheckBox("AH03");
 		chckbxNewCheckBox_1_1_4_12_1_1_1.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_4_12_1_1_1.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_4_12_1_1_1.setBounds(916, 353, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_4_12_1_1_1);
 		checkboxes.add(chckbxNewCheckBox_1_1_4_12_1_1_1);
 
-		JCheckBox chckbxNewCheckBox_1_1_4_12_1_1_2 = new JCheckBox("AH2");
+		JCheckBox chckbxNewCheckBox_1_1_4_12_1_1_2 = new JCheckBox("AH02");
 		chckbxNewCheckBox_1_1_4_12_1_1_2.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_4_12_1_1_2.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_4_12_1_1_2.setBounds(983, 353, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_4_12_1_1_2);
 		checkboxes.add(chckbxNewCheckBox_1_1_4_12_1_1_2);
 
-		JCheckBox chckbxNewCheckBox_1_1_4_12_1_1_3 = new JCheckBox("AH1");
+		JCheckBox chckbxNewCheckBox_1_1_4_12_1_1_3 = new JCheckBox("AH01");
 		chckbxNewCheckBox_1_1_4_12_1_1_3.setForeground(new Color(66, 66, 28));
 		chckbxNewCheckBox_1_1_4_12_1_1_3.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxNewCheckBox_1_1_4_12_1_1_3.setBounds(1051, 353, 66, 23);
 		frame.getContentPane().add(chckbxNewCheckBox_1_1_4_12_1_1_3);
 		checkboxes.add(chckbxNewCheckBox_1_1_4_12_1_1_3);
 
+		ArrayList<JTextField> textFields = new ArrayList<JTextField>();
+		
 		JLabel lbOdate = new JLabel("借閱日期");
 		lbOdate.setHorizontalAlignment(SwingConstants.CENTER);
 		lbOdate.setBounds(51, 491, 78, 24);
 		frame.getContentPane().add(lbOdate);
 
-		tfodate = new JTextField();
-		// Date d = new Date();
-		// String dateNow = (d.getYear() + 1900) + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String dateNow = LocalDate.now().format(formatter);  
-		tfodate.setText(dateNow);
+		tfodate = new JTextField(java.time.LocalDate.now().toString());
 		tfodate.setBounds(131, 491, 100, 24);
 		frame.getContentPane().add(tfodate);
+		textFields.add(tfodate);
 
 		JLabel lbOTime = new JLabel("借閱時間");
 		lbOTime.setHorizontalAlignment(SwingConstants.CENTER);
@@ -741,9 +726,10 @@ public class Study_location_2 {
 		frame.getContentPane().add(lbOTime);
 
 		tfoTimeStart = new JTextField();
-		tfoTimeStart.setText("10");
+		tfoTimeStart.setText(order.formatTime(java.time.LocalDateTime.now().getHour() + 1));
 		tfoTimeStart.setBounds(131, 541, 40, 24);
 		frame.getContentPane().add(tfoTimeStart);
+		textFields.add(tfoTimeStart);
 
 		JLabel lbd = new JLabel("~");
 		lbd.setHorizontalAlignment(SwingConstants.CENTER);
@@ -751,9 +737,44 @@ public class Study_location_2 {
 		frame.getContentPane().add(lbd);
 
 		tfoTimeEnd = new JTextField();
-		tfoTimeEnd.setText("13");
+		tfoTimeEnd.setText(order.formatTime(java.time.LocalDateTime.now().getHour() + 4));
 		tfoTimeEnd.setBounds(191, 541, 40, 24);
 		frame.getContentPane().add(tfoTimeEnd);
+		textFields.add(tfoTimeEnd);
+
+		setBoxStatus(checkboxes);
+		
+		JLabel lblNewLabel_3 = new JLabel("總數：85");
+		lblNewLabel_3.setBounds(70, 281, 60, 15);
+		frame.getContentPane().add(lblNewLabel_3);
+
+		JLabel lblNewLabel_4 = new JLabel("空位：" + String.format("%2d", 85 - bannedSeats.size()));
+		lblNewLabel_4.setBounds(70, 306, 60, 15);
+		frame.getContentPane().add(lblNewLabel_4);
+
+		JLabel lblNewLabel_6 = new JLabel("入座：  3");
+		lblNewLabel_6.setBounds(70, 331, 60, 15);
+		frame.getContentPane().add(lblNewLabel_6);
+
+		JLabel lblNewLabel_7 = new JLabel("暫離：  2");
+		lblNewLabel_7.setBounds(70, 356, 60, 15);
+		frame.getContentPane().add(lblNewLabel_7);
+
+		JLabel lblNewLabel_8 = new JLabel("(修改後請按Enter鍵)");
+		lblNewLabel_8.setForeground(Color.GRAY);
+		lblNewLabel_8.setBounds(95, 575, 120, 15);
+		frame.getContentPane().add(lblNewLabel_8);
+
+		for (JTextField t : textFields) {
+			t.addKeyListener(new KeyAdapter() {
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						setBoxStatus(checkboxes);
+						lblNewLabel_4.setText("空位：" + String.format("%2d", 85 - bannedSeats.size()));
+					}
+				}
+			});
+		}
 
 		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBounds(328, 542, 129, 23);
@@ -802,6 +823,10 @@ public class Study_location_2 {
 		JButton btnNewButton = new JButton("座位確認");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				order_date = tfodate.getText().trim();
+				borrow_start = Double.parseDouble(tfoTimeStart.getText().trim().replace(':', '.'));
+				borrow_end = Double.parseDouble(tfoTimeEnd.getText().trim().replace(':', '.'));
+
 				comboBox.removeAllItems();
 				comboBox_2.removeAllItems();
 				comboBox_3.removeAllItems();
@@ -812,7 +837,7 @@ public class Study_location_2 {
 						checked.add(box.getText());
 					}
 				}
-				
+
 				switch (checked.size()) {
 				case 0:
 					JOptionPane.showMessageDialog(null, "No seats selected!", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -852,19 +877,24 @@ public class Study_location_2 {
 		JButton btnNewButton_2 = new JButton("送出預約");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String id_seat = "";
 				ArrayList<String> seats = new ArrayList<String>();
+				ArrayList<Long> users = new ArrayList<Long>();
+				String id_and_seat = "";
+				// check input correctness
 				switch (checked.size()) {
 				case 0:
 					JOptionPane.showMessageDialog(null, "No seats selected!", "Error!", JOptionPane.ERROR_MESSAGE);
 					return;
 				case 1:
 					seats.add(comboBox.getSelectedItem().toString());
-					id_seat = "學號：" + id + " 座位：" + seats.get(0) + "\n";
+					users.add(id);
+					id_and_seat = "學號：" + id + "  座位：" + seats.get(0) + "\n";
 					break;
 				case 2:
 					seats.add(comboBox.getSelectedItem().toString());
 					seats.add(comboBox_2.getSelectedItem().toString());
+					users.add(id);
+					users.add(Long.parseLong(textField_1.getText()));
 					if (seats.get(0).equals(seats.get(1))) {
 						JOptionPane.showMessageDialog(null, "Please select different seats for each people, tks!",
 								"Error!", JOptionPane.ERROR_MESSAGE);
@@ -876,15 +906,19 @@ public class Study_location_2 {
 						return;
 					}
 
-					id_seat = "學號：" + id + " 座位：" + seats.get(0) + "\n" + "學號：" + textField_1.getText() + " 座位："
+					id_and_seat = "學號：" + users.get(0) + "  座位：" + seats.get(0) + "\n" + "學號：" + users.get(1) + " 座位："
 							+ seats.get(1) + "\n";
 					break;
 				case 3:
 					seats.add(comboBox.getSelectedItem().toString());
 					seats.add(comboBox_2.getSelectedItem().toString());
 					seats.add(comboBox_3.getSelectedItem().toString());
-					Set<String> s = new HashSet<String>(seats);
+					users.add(id);
+					users.add(Long.parseLong(textField_1.getText()));
+					users.add(Long.parseLong(textField_2.getText()));
+
 					// If all elements are distinct, size of HashSet should be same array.
+					Set<String> s = new HashSet<String>(seats);
 					if (s.size() != checked.size()) {
 						JOptionPane.showMessageDialog(null, "Please select different seats for each people, tks!",
 								"Error!", JOptionPane.ERROR_MESSAGE);
@@ -896,15 +930,26 @@ public class Study_location_2 {
 						return;
 					}
 
-					id_seat = "學號：" + id + " 座位：" + seats.get(0) + "\n" + "學號：" + textField_1.getText() + " 座位："
-							+ seats.get(1) + "\n" + "學號：" + textField_2.getText() + " 座位：" + seats.get(2) + "\n";
+					id_and_seat = "學號：" + users.get(0) + "  座位：" + seats.get(0) + "\n" + "學號：" + users.get(1) + " 座位："
+							+ seats.get(1) + "\n" + "學號：" + users.get(2) + " 座位：" + seats.get(2) + "\n";
 					break;
+				}
+
+				// check if the order time is not in the past
+				order_date = tfodate.getText().trim();
+				borrow_start = Double.parseDouble(tfoTimeStart.getText().trim().replace(':', '.'));
+				borrow_end = Double.parseDouble(tfoTimeEnd.getText().trim().replace(':', '.'));
+
+				String msg = order.checkCurrentTime(order_date, borrow_start);
+				if (!msg.equals("true")) {
+					JOptionPane.showMessageDialog(frame, msg, "Error!", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 
 				// Place order
 				Object[] options = { "預約", "取消" };
-				String oInfo = id_seat + "大樓：中正\n" + "區域：A\n" + "日期：" + tfodate.getText().trim() + "\n" + "時段："
-						+ tfoTimeStart.getText().trim() + " ~ " + tfoTimeEnd.getText().trim() + "\n" + "";
+				String oInfo = id_and_seat + "大樓：中正\n" + "區域：A\n" + "日期：" + order_date + "\n" + "時段："
+						+ order.formatTime(borrow_start) + " ~ " + order.formatTime(borrow_end) + "\n" + "";
 
 				int n = JOptionPane.showOptionDialog(frame, oInfo, "預約確認", JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE, null, // no custom Icon
@@ -913,87 +958,52 @@ public class Study_location_2 {
 
 				// Reservation confirmed
 				if (n == 0) {
-					Order o = new Order();
-					
-					// Create 1st order
-					String odate = tfodate.getText().trim();
-					int bStart = Integer.parseInt(tfoTimeStart.getText().trim());
-					int bEnd = Integer.parseInt(tfoTimeEnd.getText().trim());
-					if (!o.checkUserStatus(id)) {
-						JOptionPane.showMessageDialog(frame, id + "停止借用權一個月", "Error!", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					if (!o.checkSeatStatus(seats.get(0))) {
-						JOptionPane.showMessageDialog(frame, seats.get(0) + "目前不開放", "Error!", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					if (!o.createSeatOrder(seats.get(0), "T", odate, bStart, bEnd, id)) {
-						JOptionPane.showMessageDialog(frame, "預約失敗...", "Error!", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					// Create 2nd order
-					if (checked.size() > 1) {
-						long sid = Long.parseLong(textField_1.getText());
-						if (!o.checkUserStatus(sid)) {
-							JOptionPane.showMessageDialog(frame, id + "停止借用權一個月", "Error!", JOptionPane.ERROR_MESSAGE);
-							return;
-						}
-						if (!o.checkSeatStatus(seats.get(1))) {
-							JOptionPane.showMessageDialog(frame, seats.get(1) + "目前不開放", "Error!", JOptionPane.ERROR_MESSAGE);
-							return;
-						}
-						if (!o.createSeatOrder(seats.get(1), "T", odate, bStart, bEnd, sid)) {
-							JOptionPane.showMessageDialog(frame, "預約失敗...", "Error!", JOptionPane.ERROR_MESSAGE);
-							return;
+					String fail = "";
+					for (int i = 0; i < seats.size(); i++) {
+						String checkMsg = order.checkSeat(seats.get(i), users.get(i), order_date, borrow_start, borrow_end);
+						if (checkMsg.equals("true")) {
+							ArrayList<Long> u = new ArrayList<Long>();
+							u.add(users.get(i));
+							if (order.createOrder(seats.get(i), order_date, borrow_start, borrow_end, u) == -1l) {
+								fail += seats.get(i) + " ";
+							}
+						} else {
+							JOptionPane.showMessageDialog(frame, checkMsg, "Error!", JOptionPane.ERROR_MESSAGE);
+							fail += seats.get(i) + " ";
 						}
 					}
-					// Create 3rd order
-					if (checked.size() == 3) {
-						long sid = Long.parseLong(textField_2.getText());
-						if (!o.checkUserStatus(sid)) {
-							JOptionPane.showMessageDialog(frame, id + "停止借用權一個月", "Error!", JOptionPane.ERROR_MESSAGE);
-							return;
-						}
-						if (!o.checkSeatStatus(seats.get(2))) {
-							JOptionPane.showMessageDialog(frame, seats.get(2) + "目前不開放", "Error!", JOptionPane.ERROR_MESSAGE);
-							return;
-						}
-						if (!o.createSeatOrder(seats.get(2), "T", odate, bStart, bEnd, sid)) {
-							JOptionPane.showMessageDialog(frame, "預約失敗...", "Error!", JOptionPane.ERROR_MESSAGE);
-							return;
-						}
+
+					if (fail == "") {
+						JOptionPane.showMessageDialog(frame, "預約成功!!!", "通知", JOptionPane.INFORMATION_MESSAGE, null);
+					} else {
+						JOptionPane.showMessageDialog(frame, fail + "預約失敗...", "Error", JOptionPane.ERROR_MESSAGE,
+								null);
 					}
-					
-					System.out.println("預約成功");
-					Study_location_3 s3 = new Study_location_3(id);
+					UserActivity_page s3 = new UserActivity_page(id, "Seat");
 					frame.setVisible(false);
 				}
 			}
-
 		});
 		btnNewButton_2.setBounds(1064, 520, 85, 23);
 		frame.getContentPane().add(btnNewButton_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("總數：85");
-		lblNewLabel_3.setBounds(69, 261, 60, 15);
-		frame.getContentPane().add(lblNewLabel_3);
-		
-		JLabel lblNewLabel_4 = new JLabel("空位：80");
-		lblNewLabel_4.setBounds(69, 286, 60, 15);
-		frame.getContentPane().add(lblNewLabel_4);
-		
-		JLabel lblNewLabel_5 = new JLabel("已選：  5");
-		lblNewLabel_5.setBounds(69, 311, 60, 15);
-		frame.getContentPane().add(lblNewLabel_5);
-		
-		JLabel lblNewLabel_6 = new JLabel("入座：  3");
-		lblNewLabel_6.setBounds(69, 336, 60, 15);
-		frame.getContentPane().add(lblNewLabel_6);
-		
-		JLabel lblNewLabel_7 = new JLabel("暫離：  2");
-		lblNewLabel_7.setBounds(69, 361, 60, 15);
-		frame.getContentPane().add(lblNewLabel_7);
 
 		frame.setVisible(true);
+	}
+
+	public void setBoxStatus(ArrayList<JCheckBox> checkboxes) {
+		order_date = tfodate.getText().trim();
+		borrow_start = Double.parseDouble(tfoTimeStart.getText().trim().replace(':', '.'));
+		borrow_end = Double.parseDouble(tfoTimeEnd.getText().trim().replace(':', '.'));
+
+		bannedSeats = order.getBannedSeats("A", order_date, borrow_start, borrow_end);
+		for (JCheckBox b : checkboxes) {
+			if (bannedSeats.contains(b.getText())) {
+				b.setEnabled(false);
+				b.setBackground(Color.LIGHT_GRAY);
+			} else {
+				b.setEnabled(true);
+				b.setBackground(UIManager.getColor("Button.background"));
+			}
+		}
 	}
 }

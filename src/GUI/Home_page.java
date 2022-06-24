@@ -1,7 +1,6 @@
 package GUI;
 
 import Entity.User;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,10 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Font;
 
-public class Booking_page extends JFrame{
+public class Home_page extends JFrame{
 
 	public JFrame frame;
-	private Booking_page_1 dReserve;
+	private Room_page dReserve;
 	private long id;
 	private User user = new User();
 	private String name;
@@ -24,9 +23,9 @@ public class Booking_page extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public Booking_page(long id) {
+	public Home_page(long id) {
 		this.id=id;
-		name = user.getUser(id);
+		name = user.getName(id);
 		initialize();
 	}
 
@@ -49,11 +48,11 @@ public class Booking_page extends JFrame{
 		frame.getContentPane().add(lblNewLabel);
 
 		JButton btnNewButton = new JButton("\u8A0E\u8AD6\u5BA4\u9810\u7D04");
-		btnNewButton.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		btnNewButton.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		btnNewButton.setForeground(new Color(115,121,59));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dReserve = new Booking_page_1(id);
+				dReserve = new Room_page(id);
 				frame.setVisible(false);
 			}
 		});
@@ -63,11 +62,11 @@ public class Booking_page extends JFrame{
 		JButton btnNewButton_1 = new JButton("自習室劃位");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Study_location_1 study1 = new Study_location_1(id);
+				Seat_page study1 = new Seat_page(id);
 				frame.setVisible(false);
 			}
 		});
-		btnNewButton_1.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		btnNewButton_1.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		btnNewButton_1.setForeground(new Color(115,121,59));
 		btnNewButton_1.setBounds(239, 129, 159, 74);
 		frame.getContentPane().add(btnNewButton_1);
@@ -86,7 +85,7 @@ public class Booking_page extends JFrame{
 		frame.setVisible(true);
 	}
 	
-	public Booking_page_1 getBookingPage1() {
+	public Room_page getBookingPage1() {
 		return dReserve;
 	}
 

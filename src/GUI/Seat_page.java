@@ -12,10 +12,9 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Study_location_1 {
+public class Seat_page {
 
 	private JFrame frame;
-	private Color background = new Color(219,219,178);
 	private Color btncolor = new Color(115,121,59);
 	private Color word = new Color(66,66,28);
 	private long id;
@@ -28,7 +27,7 @@ public class Study_location_1 {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Study_location_1 window = new Study_location_1(109405094);
+					Seat_page window = new Seat_page(109405094);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,9 +39,9 @@ public class Study_location_1 {
 	/**
 	 * Create the application.
 	 */
-	public Study_location_1(long id) {
+	public Seat_page(long id) {
 		this.id=id;
-		name = user.getUser(id);
+		name = user.getName(id);
 		initialize();
 	}
 
@@ -61,57 +60,57 @@ public class Study_location_1 {
 		lblNewLabel.setBackground(new Color(219,219,178));
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(186, 81, 150, 28);
+		lblNewLabel.setBounds(174, 81, 150, 28);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JButton btnNewButton = new JButton("A\u5340");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Study_location_2 study2 = new Study_location_2(id);
+				SeatOrder_A study2 = new SeatOrder_A(id);
 				frame.setVisible(false);
 			}
 		});
 		btnNewButton.setForeground(btncolor);
 		btnNewButton.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		btnNewButton.setBounds(112, 181, 85, 38);
+		btnNewButton.setBounds(100, 181, 85, 38);
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnB = new JButton("B\u5340");
 		btnB.setForeground(btncolor);
 		btnB.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		btnB.setBounds(112, 242, 85, 38);
+		btnB.setBounds(100, 242, 85, 38);
 		frame.getContentPane().add(btnB);
 		
 		JButton btnC = new JButton("A1\u5340");
 		btnC.setForeground(btncolor);
 		btnC.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		btnC.setBounds(227, 181, 85, 38);
+		btnC.setBounds(215, 181, 85, 38);
 		frame.getContentPane().add(btnC);
 		
 		JButton btnD = new JButton("C\u5340");
 		btnD.setForeground(btncolor);
 		btnD.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		btnD.setBounds(339, 181, 85, 38);
+		btnD.setBounds(327, 181, 85, 38);
 		frame.getContentPane().add(btnD);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("\u53EF\u4F7F\u7528\u7B46\u96FB\u5340");
 		lblNewLabel_1_1.setForeground(word);
 		lblNewLabel_1_1.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_1.setBounds(112, 141, 91, 28);
+		lblNewLabel_1_1.setBounds(100, 141, 91, 28);
 		frame.getContentPane().add(lblNewLabel_1_1);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("寧靜區");
 		lblNewLabel_1_1_1.setForeground(word);
 		lblNewLabel_1_1_1.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_1_1.setBounds(333, 141, 91, 28);
+		lblNewLabel_1_1_1.setBounds(321, 141, 91, 28);
 		frame.getContentPane().add(lblNewLabel_1_1_1);
 		
 		JButton btnNewButton_1 = new JButton("回首頁");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Booking_page back = new Booking_page(id);
+				Home_page back = new Home_page(id);
 				back.frame.setVisible(true);
 				frame.setVisible(false);
 			}
