@@ -10,8 +10,11 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -769,6 +772,22 @@ public class SeatOrder_A {
 			t.addKeyListener(new KeyAdapter() {
 				public void keyPressed(KeyEvent e) {
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						setBoxStatus(checkboxes);
+						lblNewLabel_4.setText("空位：" + String.format("%2d", 85 - bannedSeats.size()));
+					}
+				}
+			});
+			
+			t.addFocusListener(new FocusAdapter() {
+				String beforeTxt, afterTxt;
+
+				public void focusGained(FocusEvent e) {
+					beforeTxt = t.getText();
+				}
+
+				public void focusLost(FocusEvent e) {
+					afterTxt = t.getText();
+					if (!afterTxt.equals(beforeTxt)) {
 						setBoxStatus(checkboxes);
 						lblNewLabel_4.setText("空位：" + String.format("%2d", 85 - bannedSeats.size()));
 					}

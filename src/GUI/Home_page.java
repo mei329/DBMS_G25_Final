@@ -11,20 +11,19 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Font;
 
-public class Home_page extends JFrame{
+public class Home_page extends JFrame {
 
 	public JFrame frame;
 	private Room_page dReserve;
 	private long id;
 	private User user = new User();
 	private String name;
-	
 
 	/**
 	 * Create the application.
 	 */
 	public Home_page(long id) {
-		this.id=id;
+		this.id = id;
 		name = user.getName(id);
 		initialize();
 	}
@@ -34,22 +33,22 @@ public class Home_page extends JFrame{
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(219,219,178));
-		frame.getContentPane().setForeground(new Color(219,219,178));
+		frame.getContentPane().setBackground(new Color(219, 219, 178));
+		frame.getContentPane().setForeground(new Color(219, 219, 178));
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("歡迎 "+id+" "+name);
+		JLabel lblNewLabel = new JLabel("歡迎 " + id + " " + name);
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
-		lblNewLabel.setForeground(new Color(66,66,28));
+		lblNewLabel.setForeground(new Color(66, 66, 28));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(90, 74, 258, 19);
 		frame.getContentPane().add(lblNewLabel);
 
 		JButton btnNewButton = new JButton("\u8A0E\u8AD6\u5BA4\u9810\u7D04");
 		btnNewButton.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-		btnNewButton.setForeground(new Color(115,121,59));
+		btnNewButton.setForeground(new Color(115, 121, 59));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dReserve = new Room_page(id);
@@ -67,12 +66,12 @@ public class Home_page extends JFrame{
 			}
 		});
 		btnNewButton_1.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-		btnNewButton_1.setForeground(new Color(115,121,59));
+		btnNewButton_1.setForeground(new Color(115, 121, 59));
 		btnNewButton_1.setBounds(239, 129, 159, 74);
 		frame.getContentPane().add(btnNewButton_1);
 
 		JButton btnNewButton_2 = new JButton("\u767B\u51FA");
-		btnNewButton_2.setForeground(new Color(115,121,59));
+		btnNewButton_2.setForeground(new Color(115, 121, 59));
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Login_page login = new Login_page();
@@ -81,10 +80,10 @@ public class Home_page extends JFrame{
 		});
 		btnNewButton_2.setBounds(344, 17, 85, 23);
 		frame.getContentPane().add(btnNewButton_2);
-		
+
 		frame.setVisible(true);
 	}
-	
+
 	public Room_page getBookingPage1() {
 		return dReserve;
 	}

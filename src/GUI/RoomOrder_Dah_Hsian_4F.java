@@ -369,9 +369,9 @@ public class RoomOrder_Dah_Hsian_4F {
 			public void actionPerformed(ActionEvent e) {
 				Object[] options = { "預約", "取消" };
 				int n = JOptionPane.showOptionDialog(frame,
-						"學號：" + studentId + "\n" + "大樓：達賢\n" + "自習室：" + room.substring(0, 3) + "\n日期：" + orderDate
+						"學號：" + studentId + "\n" + "大樓：達賢\n" + "討論室：" + room.substring(0, 3) + "\n日期：" + orderDate
 								+ "\n時段：" + String.format("%05.2f", borrow_start).replace('.', ':') + " ~ "
-								+ String.format("%05.2f", borrow_end).replace('.', ':') + "\n",
+								+ String.format("%05.2f", borrow_end).replace('.', ':'),
 						"預約確認", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, // no custom Icon
 						options, // the titles of buttons
 						options[0]); // default button title

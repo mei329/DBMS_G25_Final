@@ -6,11 +6,13 @@
    
    ＊beforehand：checkRoom / checkSeat（檢查使用者和座位狀態 + 檢查時間重疊與人數限制）
    
-   1. 達賢4F討論室：06-29 的 401~404（按鈕的設定避免同個討論室借用時間重疊）
+   1. 快速預約：06-26 → 選擇討論室 → 新增其他使用者*2 → 選擇討論室 → 預約
    
-   2. 自習室A區：06-25 & 06-27 的 09:00~18:00（按鈕的設定避免同個討論室借用時間重疊）
+   2. 達賢4F討論室：06-29 的 401~404（按鈕的設定避免同個討論室借用時間重疊）
    
-   3. 借用紀錄：暫離 → 續借 → 修改時段 → 修改人員 → 取消
+   3. 自習室A區：06-25 & 06-27 的 09:00~18:00（按鈕的設定避免同個討論室借用時間重疊）
+   
+   4. 借用紀錄：暫離 → 續借 → 修改時段 → 修改人員 → 取消
 
 2. Management
    
@@ -24,9 +26,9 @@
 
 3. User Info
    
-   | Name  | StudentID | Password |     | Name | ManagerID | Password |
-   |:-----:|:---------:|:--------:| --- |:----:|:---------:|:--------:|
-   | Mary  | 109306099 | abcd     | (黑) | mngr | 1         | 111      |
+   | Name | StudentID | Password |     | Name | ManagerID | Password |
+   |:----:|:---------:|:--------:| --- |:----:|:---------:|:--------:|
+   | Mary | 109306099 | abcd     | (黑) | mngr | 1         | 111      |
    | 志明   | 109405094 | haha     |     |      |           |          |
    | 春嬌   | 109405088 | hehe     |     |      |           |          |
    | 龐德   | 109405007 | 007      |     |      |           |          |
@@ -77,7 +79,8 @@
 
 ## Encountered Problems (Solved)
 
-1. ErrorMsg：*[SQLITE_BUSY] The database file is locked (database is locked)* <br>
+1. ErrorMsg：*[SQLITE_BUSY] The database file is locked (database is locked)*
+   
    Solution：Make sure the connections to database are closed properly.
    
    ```java
@@ -124,7 +127,8 @@
    }
    ```
 
-2. ErrMsg： *class javax.swing.JTable\$1 cannot be cast to class javax.swing.table.DefaultTableModel* <br>
+2. ErrMsg： *class javax.swing.JTable\$1 cannot be cast to class javax.swing.table.DefaultTableModel*
+   
    Solution：invoke `JTable(TableModel)` rather that the `JTable(Object[][], Object[])` constructor to resize the table
    
    ```java

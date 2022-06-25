@@ -32,9 +32,9 @@ public class RoomOrder_Dah_Hsian_4F_2 {
 	private User user = new User();
 	private Order order = new Order();
 	private long id;
-	private String name,  room,  order_date;
-	private double borrow_start,  borrow_end;
-	private ArrayList<Long> sids = new ArrayList<Long>();
+	private String name, room, order_date;
+	private double borrow_start, borrow_end;
+	private ArrayList<Long> uids = new ArrayList<Long>();
 
 	/**
 	 * Launch the application.
@@ -56,10 +56,9 @@ public class RoomOrder_Dah_Hsian_4F_2 {
 	/**
 	 * Create the application.
 	 */
-	public RoomOrder_Dah_Hsian_4F_2(long id, String room, String order_date, double borrow_start,
-			double borrow_end) {
+	public RoomOrder_Dah_Hsian_4F_2(long id, String room, String order_date, double borrow_start, double borrow_end) {
 		this.id = id;
-		sids.add(id);
+		uids.add(id);
 		name = user.getName(id);
 		this.room = room;
 		this.order_date = order_date;
@@ -106,7 +105,7 @@ public class RoomOrder_Dah_Hsian_4F_2 {
 		btnNewButton_2.setBounds(716, 20, 85, 23);
 		btnNewButton_2.setForeground(new Color(115, 121, 59));
 		frame.getContentPane().add(btnNewButton_2);
-		
+
 		JLabel lblNewLabel_2 = new JLabel(order_date);
 		lblNewLabel_2.setForeground(new Color(66, 66, 28));
 		lblNewLabel_2.setFont(new Font("�s�ө���", Font.PLAIN, 16));
@@ -217,21 +216,26 @@ public class RoomOrder_Dah_Hsian_4F_2 {
 		JButton btnNewButton_6 = new JButton("新增");
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				long id = Long.parseLong(textField.getText().trim());
-				String name = user.getName(id);
-				if (order.checkUserStatus(id)) {
-					sids.add(id);
-					String str = "姓名：" + name + "   證號：" + id + "\n";
-					try {
-						doc.insertString(doc.getLength(), str, doc.getStyle("regular"));
-					} catch (BadLocationException ble) {
-						System.err.println("Couldn't insert initial text into text pane.");
-					}
-				} else {
-					if (name == null) {
-						JOptionPane.showMessageDialog(frame, "沒有該位使用者!!!", "錯誤", JOptionPane.ERROR_MESSAGE, null);
+				if (textField.getText() != null) {
+					long uid = Long.parseLong(textField.getText().trim());
+					String name = user.getName(uid);
+					if (order.checkUserStatus(uid)) {
+						if (uid != id) {
+							uids.add(id);
+							String str = "姓名：" + name + "   證號：" + id + "\n";
+							try {
+								doc.insertString(doc.getLength(), str, doc.getStyle("regular"));
+							} catch (BadLocationException ble) {
+								System.err.println("Couldn't insert initial text into text pane.");
+							}
+						}
 					} else {
-						JOptionPane.showMessageDialog(frame, "該使用者暫時無法借閱!!!", "錯誤", JOptionPane.ERROR_MESSAGE, null);
+						if (name == null) {
+							JOptionPane.showMessageDialog(frame, "沒有該位使用者!!!", "錯誤", JOptionPane.ERROR_MESSAGE, null);
+						} else {
+							JOptionPane.showMessageDialog(frame, "該使用者暫時無法借閱!!!", "錯誤", JOptionPane.ERROR_MESSAGE,
+									null);
+						}
 					}
 				}
 			}
@@ -243,9 +247,9 @@ public class RoomOrder_Dah_Hsian_4F_2 {
 		JButton btnNewButton_5 = new JButton("\u9810\u7D04");
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String checkMsg = order.checkRoom(room.substring(0, 3), sids, order_date, borrow_start, borrow_end);
+				String checkMsg = order.checkRoom(room.substring(0, 3), uids, order_date, borrow_start, borrow_end);
 				if (checkMsg.equals("true")) {
-					if (order.createOrder(room.substring(0, 3), order_date, borrow_start, borrow_end, sids) != -1) {
+					if (order.createOrder(room.substring(0, 3), order_date, borrow_start, borrow_end, uids) != -1) {
 						JOptionPane.showMessageDialog(frame, "預約成功!!!", "通知", JOptionPane.INFORMATION_MESSAGE, null);
 
 						UserActivity_page s3 = new UserActivity_page(id, "Room");

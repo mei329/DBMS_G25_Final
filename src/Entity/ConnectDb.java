@@ -14,11 +14,9 @@ public class ConnectDb {
 		String url = "jdbc:sqlite:C:/Users/maggi/Downloads/room_reservation_db.db";
 		conn = null;
 		try {
-			if (conn == null) {
-				Class.forName("org.sqlite.JDBC");
-				conn = DriverManager.getConnection(url);
-				// System.out.println("Connecting to SQLite.");
-			}
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection(url);
+			// System.out.println("Connecting to SQLite.");
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
@@ -28,8 +26,10 @@ public class ConnectDb {
 
 	public void closeConn() {
 		try {
-			conn.close();
-			// System.out.println("Closing connection to SQLite.");
+			if (!conn.isClosed()) {
+				conn.close();
+				// System.out.println("Closing connection to SQLite.");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

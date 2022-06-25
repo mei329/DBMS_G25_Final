@@ -420,6 +420,33 @@ public class Order extends ConnectDb {
 		return null;
 	}
 
+	public ArrayList<String> getOpenRoom(String order_date, double borrow_start, double borrow_end,
+			ArrayList<Long> users) {
+		ArrayList<String> rooms = new ArrayList<String>();
+		try {
+			super.connect();
+			String getRoom = "SELECT room_id FROM Room";
+			Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery(getRoom);
+			
+			while (result.next()) {
+				String rid = result.getString("room_id");
+				String msg = checkRoom(rid, users, order_date, borrow_start, borrow_end);
+				if (msg.equals("true")) {
+					rooms.add(rid);
+				} else {
+					System.out.println(rid + "\n" + msg);
+				}
+			}
+			return rooms;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			super.closeConn();
+		}
+		return null;
+	}
+
 	public boolean updateOrderStatus(long order_id, String status) {
 		try {
 			super.connect();
@@ -670,7 +697,7 @@ public class Order extends ConnectDb {
 				errMsg2 = "" + errMsg3 + "\n" + errMsg2;
 			}
 		}
-		
+
 		// return error message
 		if (!errMsg1.equals("Not available: ")) {
 			errMsg1 = errMsg1.substring(0, errMsg1.length() - 2);

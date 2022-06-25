@@ -99,6 +99,8 @@ public class UserActivity_page {
 					Seat_page s1 = new Seat_page(id);
 				} else if (placeType.equals("Room")) {
 					RoomOrder_Dah_Hsian_4F d4 = new RoomOrder_Dah_Hsian_4F(id);
+				} else if (placeType.equals("Quick")) {
+					RoomOrder_Quick q = new RoomOrder_Quick(id);
 				}
 				frame.setVisible(false);
 			}
@@ -248,7 +250,7 @@ public class UserActivity_page {
 						int n = JOptionPane.showOptionDialog(frame, "請問您要修改預約時段還是修改使用人員?", "修改確認",
 								JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,
 								options[0]);
-						
+
 						if (n == 0) {
 							// 修改時段
 							String range = JOptionPane.showInputDialog(frame,
@@ -281,8 +283,7 @@ public class UserActivity_page {
 							// 修改人員
 							if (b.getBackground().equals(Color.DARK_GRAY)) {
 								String sid = order.select("seat_id", "Orders", "order_id", String.valueOf(oid))[0];
-								String[] users = order.select("user_id", "OrderUsers", "order_id",
-										String.valueOf(oid));
+								String[] users = order.select("user_id", "OrderUsers", "order_id", String.valueOf(oid));
 
 								String before = users[0];
 								// check if isRoom and isLender
@@ -297,7 +298,8 @@ public class UserActivity_page {
 								}
 
 								if (before != null) {
-									String after = JOptionPane.showInputDialog(frame, "轉讓人：" + before + "\n請輸入「被轉讓人」之user_id：");
+									String after = JOptionPane.showInputDialog(frame,
+											"轉讓人：" + before + "\n請輸入「被轉讓人」之user_id：");
 									if (after != null) {
 										if (order.modifyUser(oid, Long.parseLong(before), Long.parseLong(after))) {
 											JOptionPane.showMessageDialog(frame, "成功轉讓座位!", "通知",
