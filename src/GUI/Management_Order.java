@@ -105,14 +105,15 @@ public class Management_Order {
 		frame.getContentPane().add(lblNewLabel_2);
 
 		// create table
-		table = new JTable(new DefaultTableModel(new Object[] { "order_id", "seat_id", "status", "date", "start", "end" }, 0));
+		table = new JTable(
+				new DefaultTableModel(new Object[] { "order_id", "seat_id", "status", "date", "start", "end" }, 0));
 		table.setDefaultEditor(Object.class, null);
 		table.setBackground(UIManager.getColor("Panel.background"));
 		table.setBounds(130, 140, 420, 200);
 		JScrollPane sp = new JScrollPane(table);
 		sp.setBounds(130, 140, 420, 200);
 		frame.getContentPane().add(sp);
-		
+
 		String[] oids = order.select("order_id", "Orders", "order_status", "T");
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		for (int i = 0; i < oids.length; i++) {
@@ -197,10 +198,28 @@ public class Management_Order {
 						String before = users[0];
 						// check if isRoom and isLender
 						if (!sid.matches("^[ABC].*")) {
-							before = JOptionPane.showInputDialog(frame, "現借用者：" + Arrays.toString(users) + "\n請輸入「轉讓人」之user_id：");
-							if (order.isLender(oid, before)) {
-								JOptionPane.showMessageDialog(frame, "不能更改租借者", "要求失敗", JOptionPane.ERROR_MESSAGE);
-								return;
+							String lender = order.getLender(oid);
+							String otherU = "[]";
+							if (users.length != 1) {
+								if (users[users.length - 1].equals(lender)) {
+									otherU = Arrays.toString(users).replace(", " + lender, "");
+								} else {
+									otherU = Arrays.toString(users).replace(lender + ", ", "");
+								}
+							}
+
+							before = JOptionPane.showInputDialog(frame,
+									"租借人：" + lender + "\n現借用者：" + otherU + "\n請輸入「轉讓人」之user_id：");
+							if (before != null) {
+								if (!Arrays.toString(users).contains(before)) {
+									JOptionPane.showMessageDialog(frame, before + "不是借用者", "要求失敗",
+											JOptionPane.ERROR_MESSAGE);
+									return;
+								}
+								if (lender.equals(before)) {
+									JOptionPane.showMessageDialog(frame, "不能更改租借者", "要求失敗", JOptionPane.ERROR_MESSAGE);
+									return;
+								}
 							}
 						}
 
@@ -236,7 +255,7 @@ public class Management_Order {
 					} else if (n == 2) {
 						String uid = JOptionPane.showInputDialog(frame, Arrays.toString(users) + "\n請輸入欲刪除人員之user_id：");
 						if (uid != null) {
-							if (order.isLender(oid, uid)) {
+							if (order.getLender(oid).equals(uid)) {
 								JOptionPane.showMessageDialog(frame, "不能更改租借者", "要求失敗", JOptionPane.ERROR_MESSAGE);
 							} else {
 								if (order.checkAttendance(sid, users.length - 1)) {

@@ -101,6 +101,8 @@ public class UserActivity_page {
 					RoomOrder_Dah_Hsian_4F d4 = new RoomOrder_Dah_Hsian_4F(id);
 				} else if (placeType.equals("Quick")) {
 					RoomOrder_Quick q = new RoomOrder_Quick(id);
+				} else if (placeType.equals("Home")) {
+					Home_page bp = new Home_page(id);
 				}
 				frame.setVisible(false);
 			}
@@ -153,12 +155,12 @@ public class UserActivity_page {
 						b.setForeground(Color.black);
 						b.setBorderPainted(true);
 					} else {
-						for(JButton btn : btns) {
+						for (JButton btn : btns) {
 							btn.setBackground(UIManager.getColor("Button.background"));
 							btn.setForeground(Color.black);
 							btn.setBorderPainted(true);
 						}
-						
+
 						b.setBackground(Color.DARK_GRAY);
 						b.setForeground(Color.white);
 						b.setBorderPainted(false);
@@ -223,7 +225,7 @@ public class UserActivity_page {
 						String hrs = JOptionPane.showInputDialog(frame, "請輸入要延長續借幾小時（整數）：", "1");
 						if (hrs != null) {
 							int nHrs = Integer.parseInt(hrs.trim());
-							
+
 							if (nHrs > 0) {
 								long oid = oids.get(btns.indexOf(b));
 								System.out.println(oid);
@@ -300,12 +302,29 @@ public class UserActivity_page {
 								String before = users[0];
 								// check if isRoom and isLender
 								if (!sid.matches("^[ABC].*")) {
+									String lender = order.getLender(String.valueOf(oid));
+									String otherU = "[]";
+									if (users.length != 1) {
+										if (users[users.length - 1].equals(lender)) {
+											otherU = Arrays.toString(users).replace(", " + lender, "");
+										} else {
+											otherU = Arrays.toString(users).replace(lender + ", ", "");
+										}
+									}
+
 									before = JOptionPane.showInputDialog(frame,
-											"現借用者：" + Arrays.toString(users) + "\n請輸入「轉讓人」之user_id：");
-									if (order.isLender(String.valueOf(oid), before)) {
-										JOptionPane.showMessageDialog(frame, "不能更改租借者", "要求失敗",
-												JOptionPane.ERROR_MESSAGE);
-										return;
+											"租借人：" + lender + "\n其他借用人：" + otherU + "\n請輸入「轉讓人」之user_id：");
+									if (before != null) {
+										if (!Arrays.toString(users).contains(before)) {
+											JOptionPane.showMessageDialog(frame, before + "不是借用者", "要求失敗",
+													JOptionPane.ERROR_MESSAGE);
+											return;
+										}
+										if (lender.equals(before)) {
+											JOptionPane.showMessageDialog(frame, "不能更改租借者", "要求失敗",
+													JOptionPane.ERROR_MESSAGE);
+											return;
+										}
 									}
 								}
 

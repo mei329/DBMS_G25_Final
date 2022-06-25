@@ -709,24 +709,22 @@ public class Order extends ConnectDb {
 		}
 	}
 
-	public boolean isLender(String orderID, String userID) {
+	public String getLender(String orderID) {
 		// check if the given user is the lender of the given order
-		String query = "SELECT is_lender FROM OrderUsers WHERE order_id = " + orderID + " and user_id = " + userID;
+		String query = "SELECT user_id FROM OrderUsers WHERE order_id = " + orderID + " and is_lender = 'T'";
 		try {
 			super.connect();
 			Statement stat = super.conn.createStatement();
 			ResultSet result = stat.executeQuery(query);
 			if (result.next()) {
-				if (result.getString("is_lender").equals("T")) {
-					return true;
-				}
+				return result.getString("user_id");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			super.closeConn();
 		}
-		return false;
+		return null;
 	}
 
 	public String[] select(String select, String db, String attr, String value) {

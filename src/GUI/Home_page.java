@@ -80,6 +80,17 @@ public class Home_page extends JFrame {
 		});
 		btnNewButton_2.setBounds(344, 17, 85, 23);
 		frame.getContentPane().add(btnNewButton_2);
+		
+		JButton btnNewButton_2_1 = new JButton("借用記錄");
+		btnNewButton_2_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserActivity_page u = new UserActivity_page(id, "Home");
+				frame.setVisible(false);
+			}
+		});
+		btnNewButton_2_1.setForeground(new Color(115, 121, 59));
+		btnNewButton_2_1.setBounds(260, 17, 85, 23);
+		frame.getContentPane().add(btnNewButton_2_1);
 
 		frame.setVisible(true);
 	}
@@ -87,5 +98,4 @@ public class Home_page extends JFrame {
 	public Room_page getBookingPage1() {
 		return dReserve;
 	}
-
 }
