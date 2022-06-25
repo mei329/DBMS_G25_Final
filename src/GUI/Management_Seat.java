@@ -122,21 +122,25 @@ public class Management_Seat {
 			public void actionPerformed(ActionEvent e) {
 				String seatNum = textFieldSeatNum.getText();
 				String location = (String) (comboBox.getSelectedItem());
+				
+				System.out.println(location);
 				int locatID = 0;
 				if (location == "中正圖書館") {
 					locatID = 4;
-					if (!seatNum.startsWith("A")) {
+					if (!seatNum.startsWith("A") && !seatNum.isBlank()) {
 						JOptionPane.showMessageDialog(frame, "座位不存在於該圖書館", "錯誤", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 				} else if (location == "達賢圖書館") {
 					locatID = 1;
-					if (!seatNum.startsWith("4")) {
+					if (!seatNum.startsWith("4") && !seatNum.isBlank()) {
 						JOptionPane.showMessageDialog(frame, "座位不存在於該圖書館", "錯誤", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 				}
 
+				System.out.println(locatID);
+				
 				if (locatID != 0) {
 					if (seatNum == null || seatNum.isBlank()) {
 						// update from locat_id
@@ -161,7 +165,7 @@ public class Management_Seat {
 							}
 						}
 					} else {
-						// update from locat_id
+						// update from seat_id
 
 						if (rdbtnAllow.isSelected()) {
 							if (order.updatePlaceStatus(seatNum, "T")) {

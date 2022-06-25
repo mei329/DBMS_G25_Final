@@ -153,6 +153,12 @@ public class UserActivity_page {
 						b.setForeground(Color.black);
 						b.setBorderPainted(true);
 					} else {
+						for(JButton btn : btns) {
+							btn.setBackground(UIManager.getColor("Button.background"));
+							btn.setForeground(Color.black);
+							btn.setBorderPainted(true);
+						}
+						
 						b.setBackground(Color.DARK_GRAY);
 						b.setForeground(Color.white);
 						b.setBorderPainted(false);
@@ -215,18 +221,20 @@ public class UserActivity_page {
 				for (JButton b : btns) {
 					if (b.getBackground().equals(Color.DARK_GRAY)) {
 						String hrs = JOptionPane.showInputDialog(frame, "請輸入要延長續借幾小時（整數）：", "1");
-						int nHrs = Integer.parseInt(hrs.trim());
+						if (hrs != null) {
+							int nHrs = Integer.parseInt(hrs.trim());
+							
+							if (nHrs > 0) {
+								long oid = oids.get(btns.indexOf(b));
+								System.out.println(oid);
 
-						if (nHrs > 0) {
-							long oid = oids.get(btns.indexOf(b));
-							System.out.println(oid);
-
-							if (order.extendBorrow(oid, nHrs)) {
-								JOptionPane.showMessageDialog(frame, "成功續借" + nHrs + "小時!");
-								b.setText(order.getOrderString(oid));
-							} else {
-								JOptionPane.showMessageDialog(frame, "未成功續借...", "Error", JOptionPane.ERROR_MESSAGE,
-										null);
+								if (order.extendBorrow(oid, nHrs)) {
+									JOptionPane.showMessageDialog(frame, "成功續借" + nHrs + "小時!");
+									b.setText(order.getOrderString(oid));
+								} else {
+									JOptionPane.showMessageDialog(frame, "未成功續借...", "Error", JOptionPane.ERROR_MESSAGE,
+											null);
+								}
 							}
 						}
 						b.setBackground(UIManager.getColor("Button.background"));
@@ -253,23 +261,27 @@ public class UserActivity_page {
 
 						if (n == 0) {
 							// 修改時段
+							String[] parts = b.getText().split("~");
+							String t = parts[0].substring(parts[0].length() - 5) + "-" + parts[1];
 							String range = JOptionPane.showInputDialog(frame,
-									"請輸入借用開始與結束時間（以「-」分隔、僅限整點或半點）：ex 10:00-12:30", "-");
+									"請輸入借用開始與結束時間（以「-」分隔、僅限整點或半點）：ex 10:00-12:30", t);
 
 							try {
-								String[] rdata = range.replace(':', '.').split("-");
-								if (rdata.length == 2) {
-									double start = Double.parseDouble(rdata[0]);
-									double end = Double.parseDouble(rdata[1]);
-									System.out.println(start + ", " + end);
-									if (start < end) {
-										if (order.modifyTime(oid, "borrow_start", start)
-												&& order.modifyTime(oid, "borrow_end", end)) {
-											JOptionPane.showMessageDialog(frame, "成功修改時段!");
-											b.setText(order.getOrderString(oid));
-										} else {
-											JOptionPane.showMessageDialog(frame, "未成功修改時段...", "Error",
-													JOptionPane.ERROR_MESSAGE, null);
+								if (range != null) {
+									String[] rdata = range.replace(':', '.').split("-");
+									if (rdata.length == 2) {
+										double start = Double.parseDouble(rdata[0]);
+										double end = Double.parseDouble(rdata[1]);
+										System.out.println(start + ", " + end);
+										if (start < end) {
+											if (order.modifyTime(oid, "borrow_start", start)
+													&& order.modifyTime(oid, "borrow_end", end)) {
+												JOptionPane.showMessageDialog(frame, "成功修改時段!");
+												b.setText(order.getOrderString(oid));
+											} else {
+												JOptionPane.showMessageDialog(frame, "未成功修改時段...", "Error",
+														JOptionPane.ERROR_MESSAGE, null);
+											}
 										}
 									}
 								}

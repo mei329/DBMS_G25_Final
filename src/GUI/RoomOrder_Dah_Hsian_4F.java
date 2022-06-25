@@ -15,6 +15,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.awt.event.ActionEvent;
@@ -414,12 +415,39 @@ public class RoomOrder_Dah_Hsian_4F {
 				for (JButton b : timeBtns) {
 					b.setEnabled(true);
 				}
+				
 				Order o = new Order();
 				ArrayList<double[]> time = o.getOrderTime(roomId, orderDate);
 				for (double[] t : time) {
 					int start = (int) Math.ceil((t[0] - 8) * 2);
 					int end = (int) Math.ceil((t[1] - t[0]) * 2) + start;
 					for (int i = start; i < end; i++) {
+						timeBtns.get(i).setEnabled(false);
+					}
+				}
+				
+				if (orderDate.equals(java.time.LocalDate.now().toString())) {
+					LocalDateTime now = java.time.LocalDateTime.now();
+					double h = (double) now.getHour();
+					if (h < 8) {
+						if (now.getMinute() < 55) {
+							h = 8;
+						} else {
+							h = 8.5;
+						}
+					} else if (h > 21) {
+						h = 22;
+					} else {
+						if (now.getMinute() < 25) {
+							h += 0.5;
+						} else if (25 <= now.getMinute() && now.getMinute() < 55) {
+							h += 1;
+						} else {
+							h += 1.5;
+						}
+					}
+					
+					for (int i = 0; i < (h - 8) * 2; i++) {
 						timeBtns.get(i).setEnabled(false);
 					}
 				}

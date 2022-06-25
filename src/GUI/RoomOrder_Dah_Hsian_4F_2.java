@@ -221,8 +221,8 @@ public class RoomOrder_Dah_Hsian_4F_2 {
 					String name = user.getName(uid);
 					if (order.checkUserStatus(uid)) {
 						if (uid != id) {
-							uids.add(id);
-							String str = "姓名：" + name + "   證號：" + id + "\n";
+							uids.add(uid);
+							String str = "姓名：" + name + "   證號：" + uid + "\n";
 							try {
 								doc.insertString(doc.getLength(), str, doc.getStyle("regular"));
 							} catch (BadLocationException ble) {
