@@ -326,6 +326,8 @@ public class Order extends ConnectDb {
 	public ArrayList<double[]> getOrderTime(String seat_id, String order_date) {
 		// get the borrow time of a given seat on the given date
 		renew();
+		ArrayList<double[]> time = new ArrayList<double[]>();
+		
 		String query = "SELECT borrow_start, borrow_end, order_id FROM Orders WHERE order_status = 'T' AND order_date = '"
 				+ order_date + "' AND seat_id = '" + seat_id + "'";
 		try {
@@ -333,7 +335,7 @@ public class Order extends ConnectDb {
 			Statement stmt = conn.createStatement();
 			ResultSet result = stmt.executeQuery(query);
 
-			ArrayList<double[]> time = new ArrayList<double[]>();
+
 			while (result.next()) {
 				double[] t = new double[3];
 				t[0] = result.getDouble("borrow_start");
@@ -341,18 +343,19 @@ public class Order extends ConnectDb {
 				t[2] = result.getLong("order_id");
 				time.add(t);
 			}
-			return time;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} finally {
 			super.closeConn();
 		}
-		return null;
+		return time;
 	}
 
 	public ArrayList<double[]> getOrderTime(long user_id, String order_date) {
 		// get the borrow time of a given user on the given date
 		renew();
+		ArrayList<double[]> time = new ArrayList<double[]>();
+		
 		ArrayList<Long> oid = getUserOrder(user_id);
 		String query = "SELECT borrow_start, borrow_end, order_id FROM Orders WHERE order_status = 'T' AND order_date = '"
 				+ order_date + "' AND order_id = ";
@@ -361,7 +364,6 @@ public class Order extends ConnectDb {
 			Statement stmt = conn.createStatement();
 			ResultSet result;
 
-			ArrayList<double[]> time = new ArrayList<double[]>();
 			for (long order_id : oid) {
 				result = stmt.executeQuery(query + order_id);
 				if (result.next()) {
@@ -372,18 +374,18 @@ public class Order extends ConnectDb {
 					time.add(t);
 				}
 			}
-			return time;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} finally {
 			super.closeConn();
 		}
-		return null;
+		return time;
 	}
 
 	public ArrayList<String> getBannedSeats(String zone, String order_date, double start, double end) {
 		// get the closed seats list of a given zone on the given date
 		renew();
+		ArrayList<String> seats = new ArrayList<String>();
 		try {
 			super.connect();
 			String query = "SELECT DISTINCT(seat_id) FROM Orders WHERE order_status = 'T' AND order_date = '"
@@ -391,7 +393,6 @@ public class Order extends ConnectDb {
 			Statement stmt = conn.createStatement();
 			ResultSet result = stmt.executeQuery(query);
 
-			ArrayList<String> seats = new ArrayList<String>();
 			while (result.next()) {
 				String sid = result.getString("seat_id");
 				if (sid.matches("^" + zone + ".*")) {
@@ -411,40 +412,37 @@ public class Order extends ConnectDb {
 					}
 				}
 			}
-			return seats;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} finally {
 			super.closeConn();
 		}
-		return null;
+		return seats;
 	}
 
 	public ArrayList<String> getOpenRoom(String order_date, double borrow_start, double borrow_end,
 			ArrayList<Long> users) {
+		// get the open room list on the given date
 		ArrayList<String> rooms = new ArrayList<String>();
 		try {
 			super.connect();
 			String getRoom = "SELECT room_id FROM Room";
 			Statement stmt = conn.createStatement();
 			ResultSet result = stmt.executeQuery(getRoom);
-			
+
 			while (result.next()) {
 				String rid = result.getString("room_id");
 				String msg = checkRoom(rid, users, order_date, borrow_start, borrow_end);
 				if (msg.equals("true")) {
 					rooms.add(rid);
-				} else {
-					System.out.println(rid + "\n" + msg);
 				}
 			}
-			return rooms;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} finally {
 			super.closeConn();
 		}
-		return null;
+		return rooms;
 	}
 
 	public boolean updateOrderStatus(long order_id, String status) {

@@ -22,6 +22,8 @@ import Entity.User;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RoomOrder_Quick extends JFrame {
 
@@ -42,7 +44,7 @@ public class RoomOrder_Quick extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RoomOrder_Quick window = new RoomOrder_Quick(109405094l);
+					RoomOrder_Quick window = new RoomOrder_Quick(109405088l);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -164,6 +166,7 @@ public class RoomOrder_Quick extends JFrame {
 				if (order_date != null && textField_1.getText() != null) {
 					long uid = Long.parseLong(textField_1.getText().trim());
 					String name = user.getName(uid);
+
 					if (order.checkUserStatus(uid)
 							&& order.checkTime(String.valueOf(uid), order_date, borrow_start, borrow_end, null)) {
 						if (uid != id) {
@@ -199,20 +202,37 @@ public class RoomOrder_Quick extends JFrame {
 		frame.getContentPane().add(lblNewLabel_3_1_1);
 
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.addFocusListener(new FocusAdapter() {
-			public void focusGained(FocusEvent e) {
+		comboBox.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				// check lender status
+				if (uids.size() == 1) {
+					if (!order.checkUserStatus(id)) {
+						JOptionPane.showMessageDialog(frame, "您暫時無法借閱!", "錯誤", JOptionPane.ERROR_MESSAGE, null);
+						return;
+					}
+					if (!order.checkTime(String.valueOf(id), order_date, borrow_start, borrow_end, null)) {
+						JOptionPane.showMessageDialog(frame, "您在該時間段已有預約!", "錯誤", JOptionPane.ERROR_MESSAGE, null);
+						return;
+					}
+				}
+
+				// add comboBox items
 				ArrayList<String> rooms = order.getOpenRoom(order_date, borrow_start, borrow_end, uids);
 				comboBox.removeAllItems();
-				if (rooms != null) {
+				if (rooms.size() != 0) {
 					for (String rid : rooms) {
 						comboBox.addItem("達賢 " + rid);
 					}
+				} else {
+					JOptionPane.showMessageDialog(frame, "沒有符合條件的討論室");
+				}
+
+				// set selected item
+				if (comboBox.getItemCount() != 0) {
+					comboBox.setSelectedIndex(0);
 				}
 			}
 
-			public void focusLost(FocusEvent e) {
-				comboBox.setSelectedIndex(0);
-			}
 		});
 		comboBox.setBounds(200, 253, 130, 21);
 		frame.getContentPane().add(comboBox);
