@@ -71,8 +71,8 @@
 | Home_page         | To choose a room or seat.                           |
 | Room_page         | To choose a room.                                   |
 | Seat_page         | To choose a seat zone.                              |
-| RoomOrder_page    | To place a normal/fast order for a room.            |
-| SeatOrder_page    | To place a normal/fast order for a seat.            |
+| RoomOrder_page    | To place a normal/quick order for a room.           |
+| SeatOrder_page    | To place a order for a seat.                        |
 | UserActivity_page | To modify ongoing orders or browse past activities. |
 | Manager_page      | To choose a management type.                        |
 | Management_page   | To manipulate data from Order/Blacklist/Seat/User.  |
